@@ -30,61 +30,68 @@ const whenTitleAnimationDone = (callback) => {
 };
 
 (() => {
-  const titleEl = document.querySelector(".hero-izybiz__title");
+  // Start the hero title animation with a tiny delay so the full title
+  // is first rendered statically, then the existing animation kicks in.
+  const startTitleAnimation = () => {
+    const titleEl = document.querySelector(".hero-izybiz__title");
 
-  if (!titleEl) {
-    markTitleAnimationDone();
-    return;
-  }
+    if (!titleEl) {
+      markTitleAnimationDone();
+      return;
+    }
 
-  const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")
-    ?.matches;
+    const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")
+      ?.matches;
 
-  const originalText = titleEl.textContent || "";
-  const text = originalText.trim();
+    const originalText = titleEl.textContent || "";
+    const text = originalText.trim();
 
-  if (!text) {
-    markTitleAnimationDone();
-    return;
-  }
-  if (titleEl.dataset.animated === "true") {
-    markTitleAnimationDone();
-    return;
-  }
-  titleEl.dataset.animated = "true";
+    if (!text) {
+      markTitleAnimationDone();
+      return;
+    }
+    if (titleEl.dataset.animated === "true") {
+      markTitleAnimationDone();
+      return;
+    }
+    titleEl.dataset.animated = "true";
 
-  const letters = [];
-  titleEl.textContent = "";
+    const letters = [];
+    titleEl.textContent = "";
 
-  for (const char of text) {
-    const span = document.createElement("span");
-    span.className = "hero-izybiz__title-letter";
-    span.textContent = char;
-    titleEl.appendChild(span);
-    letters.push(span);
-  }
+    for (const char of text) {
+      const span = document.createElement("span");
+      span.className = "hero-izybiz__title-letter";
+      span.textContent = char;
+      titleEl.appendChild(span);
+      letters.push(span);
+    }
 
-  if (prefersReducedMotion) {
-    letters.forEach((letter) => {
-      letter.classList.add("hero-izybiz__title-letter--visible");
+    if (prefersReducedMotion) {
+      letters.forEach((letter) => {
+        letter.classList.add("hero-izybiz__title-letter--visible");
+      });
+      markTitleAnimationDone();
+      return;
+    }
+
+    const delayPerLetter = 90;
+
+    letters.forEach((letter, index) => {
+      const delay = index * delayPerLetter;
+      window.setTimeout(() => {
+        letter.classList.add("hero-izybiz__title-letter--visible");
+      }, delay);
     });
-    markTitleAnimationDone();
-    return;
-  }
 
-  const delayPerLetter = 90;
-
-  letters.forEach((letter, index) => {
-    const delay = index * delayPerLetter;
+    const totalDuration = (letters.length - 1) * delayPerLetter + 520;
     window.setTimeout(() => {
-      letter.classList.add("hero-izybiz__title-letter--visible");
-    }, delay);
-  });
+      markTitleAnimationDone();
+    }, totalDuration);
+  };
 
-  const totalDuration = (letters.length - 1) * delayPerLetter + 520;
-  window.setTimeout(() => {
-    markTitleAnimationDone();
-  }, totalDuration);
+  // 1s delay requested before starting the animation
+  window.setTimeout(startTitleAnimation, 1000);
 })();
 
 // Reveal hero subtitle and primary CTA only after title animation is finished
