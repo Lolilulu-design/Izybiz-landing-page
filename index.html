@@ -22,7 +22,9 @@
           <span class="site-nav__links-group">
             <a class="site-nav__link" href="#we-deliver">We deliver</a>
             <span class="site-nav__divider" aria-hidden="true"></span>
-            <a class="site-nav__link" href="#we-do">We do</a>
+            <a class="site-nav__link" href="#we-do">We create</a>
+            <span class="site-nav__divider" aria-hidden="true"></span>
+            <a class="site-nav__link" href="#faq">We answer</a>
             <span class="site-nav__divider" aria-hidden="true"></span>
             <a class="site-nav__link" href="#contact">We chat</a>
           </span>
@@ -42,7 +44,8 @@
 
       <div class="site-nav__menu" id="site-nav-menu" hidden data-nav-menu>
         <a class="site-nav__menu-link" href="#we-deliver">We deliver</a>
-        <a class="site-nav__menu-link" href="#we-do">We do</a>
+        <a class="site-nav__menu-link" href="#we-do">We create</a>
+        <a class="site-nav__menu-link" href="#faq">We answer</a>
         <a class="site-nav__menu-link" href="#contact">We chat</a>
       </div>
     </header>
@@ -58,7 +61,7 @@
             </p>
           </div>
 
-          <button class="hero-izybiz__button" type="button">Book a demo</button>
+          <button class="hero-izybiz__button" type="button" data-demo-modal-open>Book a demo</button>
         </div>
 
         <section class="we-deliver" id="we-deliver" aria-labelledby="we-deliver-title">
@@ -172,7 +175,7 @@
       <section class="section-two" id="we-do" aria-label="Case studies">
         <div class="section-two__inner">
           <header class="section-two__intro">
-            <h2 class="section-two__title">What did we do?</h2>
+            <h2 class="section-two__title">What did we create?</h2>
           </header>
 
           <div class="section-two__grid" aria-label="Case studies list">
@@ -231,6 +234,147 @@
         </div>
       </section>
 
+      <section class="section-faq" id="faq" aria-label="FAQ">
+        <div class="section-faq__inner">
+          <header class="section-faq__intro">
+            <h2 class="section-faq__title">Most common questions</h2>
+          </header>
+
+          <div class="section-faq__chat" aria-label="FAQ list">
+            <article class="faq-item" data-faq-item>
+              <h3 class="faq-item__heading">
+                <button
+                  class="faq-item__question"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="faq-a-1"
+                  id="faq-q-1"
+                  data-faq-trigger
+                >
+                  <span class="faq-item__question-bg" aria-hidden="true"></span>
+                  <span class="faq-item__label">How does IZYBIZ work?</span>
+                </button>
+              </h3>
+              <div
+                class="faq-item__answers"
+                id="faq-a-1"
+                role="region"
+                aria-labelledby="faq-q-1"
+                data-faq-panel
+                hidden
+              >
+                <div class="faq-item__pad">
+                  <div class="faq-item__bubble">
+                    <p class="faq-item__answer">
+                      We turn your inputs — from a simple idea to full design assets — into production-ready digital products.
+                      Our team orchestrates a tailored network of AI agents, selecting the right workflows, prompts, and integrations based on your needs.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="faq-item" data-faq-item>
+              <h3 class="faq-item__heading">
+                <button
+                  class="faq-item__question"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="faq-a-2"
+                  id="faq-q-2"
+                  data-faq-trigger
+                >
+                  <span class="faq-item__question-bg" aria-hidden="true"></span>
+                  <span class="faq-item__label">What do you deliver?</span>
+                </button>
+              </h3>
+              <div
+                class="faq-item__answers"
+                id="faq-a-2"
+                role="region"
+                aria-labelledby="faq-q-2"
+                data-faq-panel
+                hidden
+              >
+                <div class="faq-item__pad">
+                  <div class="faq-item__bubble">
+                    <p class="faq-item__answer">
+                      We deliver fully custom, production-ready outputs, not just concepts.
+                      Depending on your needs, this can include apps, workflows, prototypes, or high-quality UI.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="faq-item" data-faq-item>
+              <h3 class="faq-item__heading">
+                <button
+                  class="faq-item__question"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="faq-a-3"
+                  id="faq-q-3"
+                  data-faq-trigger
+                >
+                  <span class="faq-item__question-bg" aria-hidden="true"></span>
+                  <span class="faq-item__label">How long does it take?</span>
+                </button>
+              </h3>
+              <div
+                class="faq-item__answers"
+                id="faq-a-3"
+                role="region"
+                aria-labelledby="faq-q-3"
+                data-faq-panel
+                hidden
+              >
+                <div class="faq-item__pad">
+                  <div class="faq-item__bubble">
+                    <p class="faq-item__answer">
+                      We compress weeks and months of traditional work into days.
+                      Our agent-driven workflows accelerate every step, from idea to deployment, without compromising quality or reliability.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="faq-item" data-faq-item>
+              <h3 class="faq-item__heading">
+                <button
+                  class="faq-item__question"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="faq-a-4"
+                  id="faq-q-4"
+                  data-faq-trigger
+                >
+                  <span class="faq-item__question-bg" aria-hidden="true"></span>
+                  <span class="faq-item__label">What happens after I book a demo?</span>
+                </button>
+              </h3>
+              <div
+                class="faq-item__answers"
+                id="faq-a-4"
+                role="region"
+                aria-labelledby="faq-q-4"
+                data-faq-panel
+                hidden
+              >
+                <div class="faq-item__pad">
+                  <div class="faq-item__bubble">
+                    <p class="faq-item__answer">
+                      We’ll reach out to schedule a follow-up call and align on your needs.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section class="section-contact" id="contact" aria-label="We chat?">
         <div class="section-contact__inner">
           <header class="section-contact__intro">
@@ -242,7 +386,7 @@
 
           <div class="section-contact__actions">
             <a class="section-contact__cta" href="#contact" data-demo-modal-open>Email us</a>
-            <a class="section-contact__secondary" href="#we-do">See what we do</a>
+            <a class="section-contact__secondary" href="#we-do">See what we create</a>
           </div>
         </div>
       </section>
@@ -302,6 +446,16 @@
             </span>
           </button>
         </form>
+
+        <div class="demo-modal__success" hidden>
+          <h2 class="demo-modal__success-title">Email saved</h2>
+          <p class="demo-modal__success-description">
+            Thanks! We’ve saved your email. You’ll receive a confirmation email shortly.
+          </p>
+          <button type="button" class="hero-izybiz__button demo-modal__success-close" data-demo-modal-close>
+            Close
+          </button>
+        </div>
       </div>
     </div>
 

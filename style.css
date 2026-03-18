@@ -95,6 +95,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
   color: #000000;
   text-decoration: none;
   font-family: "Didact Gothic", sans-serif;
@@ -222,6 +223,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
   text-decoration: none;
   color: #000000;
   font-family: "Didact Gothic", sans-serif;
@@ -315,7 +317,7 @@ input[type="reset"] {
   margin: 0;
   font-family: "Bricolage Grotesque", sans-serif;
   font-optical-sizing: auto;
-  font-size: clamp(96px, 18vw, 300px);
+  font-size: clamp(120px, 20vw, 380px);
   font-weight: 800;
   font-style: normal;
   line-height: 1;
@@ -347,10 +349,10 @@ input[type="reset"] {
   align-items: center;
   font-family: "Bricolage Grotesque", sans-serif;
   font-optical-sizing: auto;
-  font-size: 64px;
+  font-size: 44px;
   font-weight: 400;
   font-style: normal;
-  line-height: 65px;
+  line-height: 1.15;
   letter-spacing: normal;
   font-variation-settings: "wdth" 100;
   opacity: 0;
@@ -424,7 +426,7 @@ input[type="reset"] {
   }
 
   .hero-izybiz__subtitle {
-    font-size: clamp(40px, 9.5vw, 64px);
+    font-size: clamp(28px, 7.5vw, 40px);
     line-height: 1.05;
   }
 
@@ -1478,6 +1480,178 @@ input[type="reset"] {
   transform: translateY(1px);
 }
 
+/* FAQ (chat bubbles) */
+.section-faq {
+  width: 100%;
+  background: #fff6e9;
+  padding: 56px 0 16px 0;
+}
+
+.section-faq__inner {
+  max-width: calc((442px * 3) + (16px * 2));
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.section-faq__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.section-faq__title {
+  margin: 0;
+  color: #000000;
+  text-align: center;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-optical-sizing: auto;
+  font-size: clamp(56px, 6vw, 112px);
+  font-style: normal;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -1px;
+  font-variation-settings:
+    "opsz" 14,
+    "wdth" 100;
+}
+
+.section-faq__chat {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.faq-item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.faq-item__heading {
+  margin: 0;
+}
+
+.faq-item__question {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 52px;
+}
+
+.faq-item__question-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  transform: translateY(0);
+  transition:
+    transform 320ms ease-in-out,
+    background-color 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-item__label {
+  position: relative;
+  padding: 14px 18px;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-optical-sizing: auto;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.4px;
+  color: #000000;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .faq-item__question:hover .faq-item__question-bg {
+    background: rgba(255, 255, 255, 0.92);
+    transform: translateY(-1px);
+  }
+}
+
+.faq-item__question:active .faq-item__question-bg {
+  transform: translateY(1px);
+}
+
+.faq-item__question:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 6px;
+}
+
+.faq-item__answers {
+  overflow: hidden;
+  max-height: 0px;
+  transition:
+    max-height 320ms ease-in-out,
+    opacity 220ms ease-in-out,
+    transform 220ms ease-in-out;
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.faq-item[data-open="true"] .faq-item__answers {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.faq-item__pad {
+  padding: 12px 0 2px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.faq-item__bubble {
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 28px;
+  background: #f5c21b;
+  padding: 16px 18px;
+}
+
+.faq-item__answer {
+  margin: 0;
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.84);
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .section-faq {
+    padding: 44px 0 0 0;
+  }
+
+  .section-faq__inner {
+    padding: 0 16px;
+    gap: 22px;
+  }
+
+  .faq-item__label {
+    font-size: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-item__question-bg,
+  .faq-item__answers {
+    transition: none;
+  }
+}
+
 @media (max-width: 767px) {
   .section-contact__inner {
     padding: 56px 16px 72px 16px;
@@ -1500,8 +1674,8 @@ input[type="reset"] {
   }
 
   .section-two__title {
-    font-size: clamp(44px, 10vw, 68px);
-    letter-spacing: -0.5px;
+    font-size: clamp(56px, 6vw, 112px);
+    letter-spacing: -1px;
   }
 
   .section-two__subtitle {
@@ -1671,6 +1845,14 @@ input[type="reset"] {
   line-height: 20px;
 }
 
+.demo-modal__input--error {
+  border-color: #b42318;
+}
+
+.demo-modal__input--error:focus-visible {
+  outline-color: #b42318;
+}
+
 .demo-modal__input::placeholder {
   color: rgba(0, 0, 0, 0.45);
 }
@@ -1696,6 +1878,43 @@ input[type="reset"] {
   color: #05603a;
 }
 
+.demo-modal__success {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.demo-modal__success-title {
+  margin: 0;
+  color: #000000;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-optical-sizing: auto;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+}
+
+.demo-modal__success-description {
+  margin: 0;
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.78);
+}
+
+.demo-modal__success-close {
+  background: #ffffff;
+  color: #000000;
+  opacity: 1;
+  transform: none;
+}
+
+.demo-modal__success-close:hover,
+.demo-modal__success-close:active {
+  background: rgba(255, 255, 255, 0.92);
+}
+
 .demo-modal__submit-button {
   position: relative;
   display: inline-flex;
@@ -1719,14 +1938,18 @@ input[type="reset"] {
   display: none;
   font-family: "Didact Gothic", sans-serif;
   font-size: 14px;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
 }
 
 .demo-modal__submit-button[data-loading="true"] .demo-modal__submit-label {
-  opacity: 0;
+  visibility: hidden;
 }
 
 .demo-modal__submit-button[data-loading="true"] .demo-modal__submit-loading {
-  display: inline-flex;
+  display: flex;
 }
 
 .demo-modal__submit-button:disabled {

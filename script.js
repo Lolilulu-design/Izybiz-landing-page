@@ -128,67 +128,89 @@ const whenTitleAnimationDone = (callback) => {
 
     const isMobile = window.matchMedia?.("(max-width: 767px)")?.matches;
     if (isMobile) {
-      // Desktop keeps its current reveal behavior. On mobile we animate cards
-      // using the same reveal-base/reveal-visible pattern as section two.
-      row.classList.add("is-revealed");
+      let started = false;
 
-      if (!cards.length) return;
+      const startMobile = () => {
+        if (started) return;
+        started = true;
 
-      cards.forEach((card) => card.classList.add("reveal-base"));
+        // Reveal the we-deliver cards only after the we-deliver title has been revealed.
+        row.classList.add("is-revealed");
 
-      let cardIndex = 0;
-      const cardObserver = new IntersectionObserver(
-        (entries, obs) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            const el = entry.target;
+        if (!cards.length) return;
 
-            if (el.classList.contains("reveal-visible")) {
+        cards.forEach((card) => card.classList.add("reveal-base"));
+
+        let cardIndex = 0;
+        const cardObserver = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const el = entry.target;
+
+              if (el.classList.contains("reveal-visible")) {
+                obs.unobserve(el);
+                return;
+              }
+
+              const delay = cardIndex * 120;
+              el.style.transitionDelay = `${delay}ms`;
+              el.classList.add("reveal-visible");
+              cardIndex += 1;
+
               obs.unobserve(el);
-              return;
-            }
+            });
+          },
+          {
+            threshold: 0,
+            rootMargin: "0px",
+          },
+        );
 
-            const delay = cardIndex * 120;
-            el.style.transitionDelay = `${delay}ms`;
-            el.classList.add("reveal-visible");
-            cardIndex += 1;
+        cards.forEach((card) => cardObserver.observe(card));
+      };
 
-            obs.unobserve(el);
-          });
-        },
-        {
-          threshold: 0.15,
-          rootMargin: "0px 0px -10% 0px",
-        },
-      );
-
-      cards.forEach((card) => cardObserver.observe(card));
+      window.__onWeDeliverIntroRevealedCallbacks =
+        window.__onWeDeliverIntroRevealedCallbacks || [];
+      window.__onWeDeliverIntroRevealedCallbacks.push(startMobile);
+      if (window.__weDeliverIntroRevealed) startMobile();
       return;
     }
 
-    let removeTimer = null;
+    let pendingRowReveal = false;
 
+    window.__onWeDeliverIntroRevealedCallbacks =
+      window.__onWeDeliverIntroRevealedCallbacks || [];
+    window.__onWeDeliverIntroRevealedCallbacks.push(() => {
+      if (!pendingRowReveal) return;
+      row.classList.add("is-revealed");
+      pendingRowReveal = false;
+    });
+
+    if (window.__weDeliverIntroRevealed) {
+      row.classList.add("is-revealed");
+    }
+
+    let weDeliverSectionSeen = false;
     const revealObserver = new IntersectionObserver(
-      (entries) => {
+      (entries, obs) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            if (removeTimer) {
-              window.clearTimeout(removeTimer);
-              removeTimer = null;
+            if (weDeliverSectionSeen) return;
+            weDeliverSectionSeen = true;
+            if (window.__weDeliverIntroRevealed) {
+              row.classList.add("is-revealed");
+            } else {
+              pendingRowReveal = true;
             }
-            row.classList.add("is-revealed");
-          } else {
-            if (removeTimer) window.clearTimeout(removeTimer);
-            removeTimer = window.setTimeout(() => {
-              row.classList.remove("is-revealed");
-              removeTimer = null;
-            }, 150);
+            obs.disconnect();
+            return;
           }
         }
       },
       {
-        threshold: 0.35,
-        rootMargin: "0px 0px -15% 0px",
+        threshold: 0,
+        rootMargin: "0px",
       },
     );
 
@@ -210,7 +232,6 @@ const whenTitleAnimationDone = (callback) => {
     const revealSelectors = [
       ".hero-izybiz",
       ".we-deliver__intro",
-      ".section-two__inner",
       ".section-two__intro",
       ".section-two__grid",
       ".section-two__case-copy",
@@ -233,7 +254,28 @@ const whenTitleAnimationDone = (callback) => {
       el.classList.add("reveal-base");
     });
 
-    let revealIndex = 0;
+    // Used to enforce the global order of reveal animations.
+    const order = new Map(targets.map((el, i) => [el, i]));
+
+    window.__weDeliverIntroRevealed = false;
+    window.__sectionTwoDivsRevealed = false;
+
+    window.__onWeDeliverIntroRevealedCallbacks =
+      window.__onWeDeliverIntroRevealedCallbacks || [];
+    window.__onSectionTwoDivsRevealedCallbacks =
+      window.__onSectionTwoDivsRevealedCallbacks || [];
+
+    const sectionTwoDivElsSet = new Set();
+    [
+      ".section-two__grid",
+      ".section-two__case-copy",
+      ".section-two__case-visual",
+    ].forEach((sel) => {
+      document.querySelectorAll(sel).forEach((el) => sectionTwoDivElsSet.add(el));
+    });
+
+    const revealedSectionTwoDivs = new Set();
+    const revealedTargets = new Set();
 
     const observer = new IntersectionObserver(
       (entries, obs) => {
@@ -243,25 +285,124 @@ const whenTitleAnimationDone = (callback) => {
           const el = entry.target;
 
           if (el.classList.contains("reveal-visible")) {
+            revealedTargets.add(el);
             obs.unobserve(el);
             return;
           }
 
-          const delay = revealIndex * 80;
-          el.style.transitionDelay = `${delay}ms`;
+          const idx = order.get(el) ?? 0;
+          el.style.transitionDelay = `${idx * 80}ms`;
           el.classList.add("reveal-visible");
-          revealIndex += 1;
+          revealedTargets.add(el);
+
+          if (
+            !window.__weDeliverIntroRevealed &&
+            el.classList.contains("we-deliver__intro")
+          ) {
+            window.__weDeliverIntroRevealed = true;
+            window.__onWeDeliverIntroRevealedCallbacks.forEach((cb) => {
+              try {
+                cb();
+              } catch {
+                // ignore
+              }
+            });
+          }
+
+          if (sectionTwoDivElsSet.has(el)) {
+            revealedSectionTwoDivs.add(el);
+            if (
+              !window.__sectionTwoDivsRevealed &&
+              revealedSectionTwoDivs.size === sectionTwoDivElsSet.size
+            ) {
+              window.__sectionTwoDivsRevealed = true;
+              window.__onSectionTwoDivsRevealedCallbacks.forEach((cb) => {
+                try {
+                  cb();
+                } catch {
+                  // ignore
+                }
+              });
+            }
+          }
+
+          if (revealedTargets.size === targets.length) {
+            obs.disconnect();
+            return;
+          }
 
           obs.unobserve(el);
         });
       },
       {
-        threshold: 0.15,
-        rootMargin: "0px 0px -10% 0px",
+        threshold: 0,
+        rootMargin: "0px",
       },
     );
 
     targets.forEach((el) => observer.observe(el));
+  });
+})();
+
+// FAQ reveal (title first, then questions one by one)
+(() => {
+  whenTitleAnimationDone(() => {
+    const prefersReducedMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    )?.matches;
+
+    if (prefersReducedMotion) return;
+
+    const faqSection = document.querySelector("#faq") || document.querySelector(".section-faq");
+    const titleEl = document.querySelector(".section-faq__title");
+    const questionEls = Array.from(
+      document.querySelectorAll(".section-faq__chat .faq-item__question"),
+    );
+
+    if (!faqSection || !titleEl || !questionEls.length) return;
+
+    const sequence = [titleEl, ...questionEls];
+
+    sequence.forEach((el) => el.classList.add("reveal-base"));
+
+    let faqInView = false;
+    let started = false;
+
+    const start = () => {
+      if (started) return;
+      if (!faqInView) return;
+      if (!window.__sectionTwoDivsRevealed) return;
+
+      started = true;
+
+      sequence.forEach((el, idx) => {
+        el.style.transitionDelay = `${idx * 80}ms`;
+        el.classList.add("reveal-visible");
+      });
+    };
+
+    const faqObserver = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          faqInView = true;
+          start();
+          obs.unobserve(entry.target);
+        });
+      },
+      {
+        threshold: 0,
+        rootMargin: "0px",
+      },
+    );
+
+    faqObserver.observe(faqSection);
+
+    window.__onSectionTwoDivsRevealedCallbacks =
+      window.__onSectionTwoDivsRevealedCallbacks || [];
+    window.__onSectionTwoDivsRevealedCallbacks.push(start);
+
+    if (window.__sectionTwoDivsRevealed) start();
   });
 })();
 
@@ -397,10 +538,116 @@ const whenTitleAnimationDone = (callback) => {
   sections.forEach((section) => observer.observe(section));
 })();
 
+// FAQ accordion (chat bubbles)
+(() => {
+  const items = Array.from(document.querySelectorAll("[data-faq-item]"));
+  if (!items.length) return;
+
+  const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+  const getParts = (item) => {
+    const trigger = item.querySelector("[data-faq-trigger]");
+    const panel = item.querySelector("[data-faq-panel]");
+    return { trigger, panel };
+  };
+
+  const closeItem = (item) => {
+    const { trigger, panel } = getParts(item);
+    if (!trigger || !panel) return;
+
+    trigger.setAttribute("aria-expanded", "false");
+    item.dataset.open = "false";
+
+    if (prefersReducedMotion) {
+      panel.style.maxHeight = "0px";
+      panel.setAttribute("hidden", "");
+      return;
+    }
+
+    const from = panel.scrollHeight;
+    panel.style.maxHeight = `${from}px`;
+    panel.getBoundingClientRect(); // force reflow
+    panel.style.maxHeight = "0px";
+
+    const onEnd = (event) => {
+      if (event.propertyName !== "max-height") return;
+      if (trigger.getAttribute("aria-expanded") !== "false") return;
+      panel.setAttribute("hidden", "");
+    };
+    panel.addEventListener("transitionend", onEnd, { once: true });
+  };
+
+  const openItem = (item) => {
+    const { trigger, panel } = getParts(item);
+    if (!trigger || !panel) return;
+
+    trigger.setAttribute("aria-expanded", "true");
+    item.dataset.open = "true";
+    panel.removeAttribute("hidden");
+
+    if (prefersReducedMotion) {
+      panel.style.maxHeight = "none";
+      return;
+    }
+
+    panel.style.maxHeight = "0px";
+    const to = panel.scrollHeight;
+    panel.getBoundingClientRect(); // force reflow
+    panel.style.maxHeight = `${to}px`;
+  };
+
+  const closeAllExcept = (keepItem) => {
+    items.forEach((item) => {
+      if (item === keepItem) return;
+      const { trigger } = getParts(item);
+      if (!trigger) return;
+      if (trigger.getAttribute("aria-expanded") === "true") {
+        closeItem(item);
+      }
+    });
+  };
+
+  items.forEach((item) => {
+    const { trigger } = getParts(item);
+    if (!trigger) return;
+
+    trigger.addEventListener("click", () => {
+      const isOpen = trigger.getAttribute("aria-expanded") === "true";
+      if (isOpen) {
+        closeItem(item);
+        return;
+      }
+      closeAllExcept(item);
+      openItem(item);
+    });
+  });
+
+  // Initialize: no question open by default
+  items.forEach((item) => {
+    const { trigger, panel } = getParts(item);
+    if (!trigger || !panel) return;
+
+    trigger.setAttribute("aria-expanded", "false");
+    item.dataset.open = "false";
+    panel.style.maxHeight = "0px";
+    panel.setAttribute("hidden", "");
+  });
+
+  // Keep max-height correct on resize for the open item
+  window.addEventListener("resize", () => {
+    if (prefersReducedMotion) return;
+    const open = items.find((item) => item.dataset.open === "true");
+    if (!open) return;
+    const { panel } = getParts(open);
+    if (!panel) return;
+    panel.style.maxHeight = `${panel.scrollHeight}px`;
+  });
+})();
+
 // Book a demo modal behavior
 (() => {
   const openTriggers = document.querySelectorAll(
-    ".hero-izybiz__button, [data-demo-modal-open]",
+    "[data-demo-modal-open]",
   );
   const modal = document.querySelector(".demo-modal");
   const dialog = modal?.querySelector(".demo-modal__dialog");
@@ -409,6 +656,8 @@ const whenTitleAnimationDone = (callback) => {
   const emailInput = modal?.querySelector("#demo-modal-email");
   const messageEl = modal?.querySelector(".demo-modal__message");
   const submitButton = modal?.querySelector(".demo-modal__submit-button");
+  const successScreen = modal?.querySelector(".demo-modal__success");
+  const header = modal?.querySelector(".demo-modal__header");
 
   if (
     !openTriggers.length ||
@@ -418,7 +667,9 @@ const whenTitleAnimationDone = (callback) => {
     !form ||
     !emailInput ||
     !messageEl ||
-    !submitButton
+    !submitButton ||
+    !successScreen ||
+    !header
   ) {
     return;
   }
@@ -441,16 +692,51 @@ const whenTitleAnimationDone = (callback) => {
     }
   };
 
+  const setEmailError = (isError, text) => {
+    if (isError) {
+      emailInput.classList.add("demo-modal__input--error");
+      emailInput.setAttribute("aria-invalid", "true");
+      messageEl.id ||= "demo-modal-message";
+      emailInput.setAttribute("aria-describedby", messageEl.id);
+      setMessage(text, "error");
+    } else {
+      emailInput.classList.remove("demo-modal__input--error");
+      emailInput.removeAttribute("aria-invalid");
+      emailInput.removeAttribute("aria-describedby");
+      setMessage("", null);
+    }
+  };
+
   const setLoading = (isLoading) => {
     submitButton.dataset.loading = isLoading ? "true" : "false";
     submitButton.disabled = isLoading;
+  };
+
+  const showSuccessScreen = () => {
+    header.hidden = true;
+    form.hidden = true;
+    successScreen.removeAttribute("hidden");
+
+    const focusTarget =
+      successScreen.querySelector("[data-demo-modal-close]") ||
+      successScreen.querySelector("button, [href], input, [tabindex]:not([tabindex='-1'])");
+    if (focusTarget && typeof focusTarget.focus === "function") {
+      focusTarget.focus();
+    }
+  };
+
+  const showFormScreen = () => {
+    successScreen.setAttribute("hidden", "");
+    header.hidden = false;
+    form.hidden = false;
   };
 
   const openModal = () => {
     if (!modal.hasAttribute("hidden")) return;
     lastFocusedElement = document.activeElement;
     modal.removeAttribute("hidden");
-    setMessage("", null);
+    showFormScreen();
+    setEmailError(false);
     emailInput.value = "";
     emailInput.focus();
 
@@ -461,6 +747,8 @@ const whenTitleAnimationDone = (callback) => {
     if (modal.hasAttribute("hidden")) return;
     modal.setAttribute("hidden", "");
     setLoading(false);
+    showFormScreen();
+    setEmailError(false);
     document.removeEventListener("keydown", handleKeydown);
     if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
       lastFocusedElement.focus();
@@ -501,6 +789,15 @@ const whenTitleAnimationDone = (callback) => {
     return pattern.test(value);
   };
 
+  emailInput.addEventListener("input", () => {
+    if (emailInput.classList.contains("demo-modal__input--error")) {
+      const value = emailInput.value.trim();
+      if (isValidEmail(value)) {
+        setEmailError(false);
+      }
+    }
+  });
+
   openTriggers.forEach((trigger) => {
     trigger.addEventListener("click", (event) => {
       event.preventDefault();
@@ -518,21 +815,20 @@ const whenTitleAnimationDone = (callback) => {
     event.preventDefault();
 
     const value = emailInput.value.trim();
-    setMessage("", null);
+    setEmailError(false);
 
     if (!isValidEmail(value)) {
-      setMessage("Please enter a valid email address.", "error");
+      setEmailError(true, "Invalid email. Please re-enter your email.");
       emailInput.focus();
       return;
     }
 
     setLoading(true);
-    setMessage("", null);
+    setEmailError(false);
 
     window.setTimeout(() => {
       setLoading(false);
-      setMessage("Thanks! We’ll reach out soon.", "success");
-      emailInput.focus();
+      showSuccessScreen();
     }, 900);
   });
 })();
