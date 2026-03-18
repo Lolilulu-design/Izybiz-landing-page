@@ -871,15 +871,16 @@ input[type="reset"] {
     width: min(442px, calc(100vw - 32px));
     height: 616px;
     flex: 0 0 auto;
-    display: flex;
-    justify-content: center;
+    position: relative;
   }
 
   .we-deliver__card-inner {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 50%;
     width: 442px;
     height: 616px;
-    transform: scale(var(--we-deliver-scale));
+    transform: translateX(-50%) scale(var(--we-deliver-scale));
     transform-origin: top center;
   }
 
