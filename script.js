@@ -125,6 +125,15 @@ const whenTitleAnimationDone = (callback) => {
       return;
     }
 
+    const isMobile = window.matchMedia?.("(max-width: 767px)")?.matches;
+    if (isMobile) {
+      // Desktop keeps its current reveal behavior. On mobile we rely on the
+      // generic reveal animation (reveal-base/reveal-visible) for staggered cards,
+      // so ensure the row is in its revealed state.
+      row.classList.add("is-revealed");
+      return;
+    }
+
     let removeTimer = null;
 
     const revealObserver = new IntersectionObserver(
@@ -164,6 +173,8 @@ const whenTitleAnimationDone = (callback) => {
       return;
     }
 
+    const isMobile = window.matchMedia?.("(max-width: 767px)")?.matches;
+
     const revealSelectors = [
       ".hero-izybiz",
       ".we-deliver__intro",
@@ -173,6 +184,10 @@ const whenTitleAnimationDone = (callback) => {
       ".section-two__case-copy",
       ".section-two__case-visual",
     ];
+
+    if (isMobile) {
+      revealSelectors.push(".we-deliver__card");
+    }
 
     const targets = [];
 

@@ -862,6 +862,18 @@ input[type="reset"] {
     --card-scale: 1;
   }
 
+  .we-deliver__cards-row .we-deliver__card.reveal-base {
+    opacity: 0;
+    filter: blur(2px);
+    --card-translate-y: 18px;
+  }
+
+  .we-deliver__cards-row .we-deliver__card.reveal-visible {
+    opacity: 1;
+    filter: none;
+    --card-translate-y: 0px;
+  }
+
   .we-deliver__intro {
     width: 100%;
   }
