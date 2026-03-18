@@ -884,6 +884,11 @@ input[type="reset"] {
     transform-origin: top center;
   }
 
+  .we-deliver__card-illustration--agent {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
   .we-deliver__card:last-child {
     margin-right: 0;
   }
