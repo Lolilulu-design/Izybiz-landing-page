@@ -862,7 +862,7 @@ input[type="reset"] {
   .we-deliver__card {
     --we-deliver-scale: 1;
     width: min(442px, 100%);
-    height: calc(616px * var(--we-deliver-scale));
+    height: 616px;
     flex: 0 0 auto;
   }
 
@@ -882,6 +882,7 @@ input[type="reset"] {
 @media (max-width: 430px) {
   .we-deliver__card {
     --we-deliver-scale: 0.9;
+    height: 554px;
   }
 }
 
