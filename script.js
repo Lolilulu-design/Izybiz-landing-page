@@ -2,6 +2,10 @@
 window.__izybizTitleAnimationDone = false;
 window.__izybizTitleAnimationCallbacks = [];
 
+// Supabase Edge Function (edit if you redeploy to another project/function URL)
+const EDGE_FUNCTION_SEND_DEMO_CONFIRMATION_URL =
+  "https://ceczxjsyksmqostlkvdh.supabase.co/functions/v1/send-demo-confirmation";
+
 const markTitleAnimationDone = () => {
   if (window.__izybizTitleAnimationDone) return;
   window.__izybizTitleAnimationDone = true;
@@ -17,8 +21,9 @@ const markTitleAnimationDone = () => {
 };
 
 const whenTitleAnimationDone = (callback) => {
-  const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")
-    ?.matches;
+  const prefersReducedMotion = window.matchMedia?.(
+    "(prefers-reduced-motion: reduce)",
+  )?.matches;
 
   // If motion is reduced or title animation already done, run immediately
   if (prefersReducedMotion || window.__izybizTitleAnimationDone) {
@@ -27,6 +32,36 @@ const whenTitleAnimationDone = (callback) => {
   }
 
   window.__izybizTitleAnimationCallbacks.push(callback);
+};
+
+window.__izybizHeroIntroReady = false;
+window.__izybizHeroIntroReadyCallbacks = [];
+
+const markHeroIntroReady = () => {
+  if (window.__izybizHeroIntroReady) return;
+  window.__izybizHeroIntroReady = true;
+  const callbacks = window.__izybizHeroIntroReadyCallbacks || [];
+  window.__izybizHeroIntroReadyCallbacks = [];
+  callbacks.forEach((cb) => {
+    try {
+      cb();
+    } catch {
+      // ignore callback errors to avoid breaking others
+    }
+  });
+};
+
+const whenHeroIntroReady = (callback) => {
+  const prefersReducedMotion = window.matchMedia?.(
+    "(prefers-reduced-motion: reduce)",
+  )?.matches;
+
+  if (prefersReducedMotion || window.__izybizHeroIntroReady) {
+    callback();
+    return;
+  }
+
+  window.__izybizHeroIntroReadyCallbacks.push(callback);
 };
 
 (() => {
@@ -40,8 +75,9 @@ const whenTitleAnimationDone = (callback) => {
       return;
     }
 
-    const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")
-      ?.matches;
+    const prefersReducedMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    )?.matches;
 
     const originalText = titleEl.textContent || "";
     const text = originalText.trim();
@@ -99,6 +135,9 @@ const whenTitleAnimationDone = (callback) => {
   whenTitleAnimationDone(() => {
     const subtitle = document.querySelector(".hero-izybiz__subtitle");
     const button = document.querySelector(".hero-izybiz__button");
+    const prefersReducedMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    )?.matches;
 
     if (subtitle) {
       subtitle.classList.add("hero-izybiz__subtitle--visible");
@@ -107,19 +146,28 @@ const whenTitleAnimationDone = (callback) => {
     if (button) {
       button.classList.add("hero-izybiz__button--visible");
     }
+
+    if (prefersReducedMotion) {
+      markHeroIntroReady();
+      return;
+    }
+
+    // Wait for subtitle/button reveal transitions before starting section-one reveals.
+    window.setTimeout(markHeroIntroReady, 560);
   });
 })();
 
 (() => {
-  whenTitleAnimationDone(() => {
+  whenHeroIntroReady(() => {
     const section = document.querySelector(".we-deliver");
     const row = document.querySelector(".we-deliver__cards-row");
     const cards = Array.from(document.querySelectorAll(".we-deliver__card"));
 
     if (!section || !row) return;
 
-    const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")
-      ?.matches;
+    const prefersReducedMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    )?.matches;
 
     if (prefersReducedMotion) {
       row.classList.add("is-revealed");
@@ -220,8 +268,9 @@ const whenTitleAnimationDone = (callback) => {
 
 (() => {
   whenTitleAnimationDone(() => {
-    const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")
-      ?.matches;
+    const prefersReducedMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    )?.matches;
 
     if (prefersReducedMotion) {
       return;
@@ -271,7 +320,9 @@ const whenTitleAnimationDone = (callback) => {
       ".section-two__case-copy",
       ".section-two__case-visual",
     ].forEach((sel) => {
-      document.querySelectorAll(sel).forEach((el) => sectionTwoDivElsSet.add(el));
+      document
+        .querySelectorAll(sel)
+        .forEach((el) => sectionTwoDivElsSet.add(el));
     });
 
     const revealedSectionTwoDivs = new Set();
@@ -353,7 +404,8 @@ const whenTitleAnimationDone = (callback) => {
 
     if (prefersReducedMotion) return;
 
-    const faqSection = document.querySelector("#faq") || document.querySelector(".section-faq");
+    const faqSection =
+      document.querySelector("#faq") || document.querySelector(".section-faq");
     const titleEl = document.querySelector(".section-faq__title");
     const questionEls = Array.from(
       document.querySelectorAll(".section-faq__chat .faq-item__question"),
@@ -470,80 +522,17 @@ const whenTitleAnimationDone = (callback) => {
   });
 })();
 
-// Navbar scrollspy (optional)
-(() => {
-  const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")
-    ?.matches;
-
-  const links = Array.from(document.querySelectorAll('.site-nav__link[href^="#"]'));
-  if (!links.length) return;
-
-  const linkById = new Map();
-  links.forEach((link) => {
-    const href = link.getAttribute("href") || "";
-    const id = href.startsWith("#") ? href.slice(1) : "";
-    if (!id) return;
-    linkById.set(id, link);
-  });
-
-  const ids = Array.from(linkById.keys());
-  const sections = ids
-    .map((id) => document.getElementById(id))
-    .filter(Boolean);
-
-  if (!sections.length) return;
-
-  const setActive = (activeId) => {
-    linkById.forEach((link, id) => {
-      if (id === activeId) {
-        link.setAttribute("aria-current", "page");
-      } else {
-        link.removeAttribute("aria-current");
-      }
-    });
-  };
-
-  const getMostVisible = (entries) => {
-    let best = null;
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      if (!best || entry.intersectionRatio > best.intersectionRatio) {
-        best = entry;
-      }
-    }
-    return best;
-  };
-
-  if (prefersReducedMotion) {
-    const hash = window.location.hash?.slice(1);
-    if (hash && linkById.has(hash)) setActive(hash);
-    return;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      const best = getMostVisible(entries);
-      const el = best?.target;
-      const id = el?.id;
-      if (id && linkById.has(id)) {
-        setActive(id);
-      }
-    },
-    {
-      threshold: [0.25, 0.35, 0.45, 0.55, 0.65],
-      rootMargin: "-20% 0px -65% 0px",
-    },
-  );
-
-  sections.forEach((section) => observer.observe(section));
-})();
+// Navbar links stay neutral while scrolling:
+// navigation only happens on click via native anchor behavior.
 
 // FAQ accordion (chat bubbles)
 (() => {
   const items = Array.from(document.querySelectorAll("[data-faq-item]"));
   if (!items.length) return;
 
-  const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  const prefersReducedMotion = window.matchMedia?.(
+    "(prefers-reduced-motion: reduce)",
+  )?.matches;
 
   const getParts = (item) => {
     const trigger = item.querySelector("[data-faq-trigger]");
@@ -646,9 +635,7 @@ const whenTitleAnimationDone = (callback) => {
 
 // Book a demo modal behavior
 (() => {
-  const openTriggers = document.querySelectorAll(
-    "[data-demo-modal-open]",
-  );
+  const openTriggers = document.querySelectorAll("[data-demo-modal-open]");
   const modal = document.querySelector(".demo-modal");
   const dialog = modal?.querySelector(".demo-modal__dialog");
   const closeElements = modal?.querySelectorAll("[data-demo-modal-close]");
@@ -684,7 +671,10 @@ const whenTitleAnimationDone = (callback) => {
 
   const setMessage = (text, type) => {
     messageEl.textContent = text || "";
-    messageEl.classList.remove("demo-modal__message--error", "demo-modal__message--success");
+    messageEl.classList.remove(
+      "demo-modal__message--error",
+      "demo-modal__message--success",
+    );
     if (type === "error") {
       messageEl.classList.add("demo-modal__message--error");
     } else if (type === "success") {
@@ -719,7 +709,9 @@ const whenTitleAnimationDone = (callback) => {
 
     const focusTarget =
       successScreen.querySelector("[data-demo-modal-close]") ||
-      successScreen.querySelector("button, [href], input, [tabindex]:not([tabindex='-1'])");
+      successScreen.querySelector(
+        "button, [href], input, [tabindex]:not([tabindex='-1'])",
+      );
     if (focusTarget && typeof focusTarget.focus === "function") {
       focusTarget.focus();
     }
@@ -826,9 +818,47 @@ const whenTitleAnimationDone = (callback) => {
     setLoading(true);
     setEmailError(false);
 
-    window.setTimeout(() => {
-      setLoading(false);
-      showSuccessScreen();
-    }, 900);
+    window
+      .fetch(EDGE_FUNCTION_SEND_DEMO_CONFIRMATION_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlY3p4anN5a3NtcW9zdGxrdmRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NDkxMTYsImV4cCI6MjA4OTQyNTExNn0.NTWloTO7OkoAMOiz8TSi9LrJc1ZGRwDnxo-ImRRbhLw",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlY3p4anN5a3NtcW9zdGxrdmRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NDkxMTYsImV4cCI6MjA4OTQyNTExNn0.NTWloTO7OkoAMOiz8TSi9LrJc1ZGRwDnxo-ImRRbhLw",
+        },
+        body: JSON.stringify({ email: value }),
+      })
+      .then(async (res) => {
+        let data = null;
+        try {
+          data = await res.json();
+        } catch {
+          // If the server didn't return JSON, we'll fall back to generic error.
+        }
+
+        if (res.ok && data?.ok === true) {
+          setLoading(false);
+          showSuccessScreen();
+          return;
+        }
+
+        const message =
+          (data && typeof data.message === "string" && data.message.trim()) ||
+          "Something went wrong while sending your confirmation email. Please try again.";
+
+        setLoading(false);
+        setEmailError(true, message);
+        emailInput.focus();
+      })
+      .catch(() => {
+        setLoading(false);
+        setEmailError(
+          true,
+          "Could not reach the email service. Please try again in a moment.",
+        );
+        emailInput.focus();
+      });
   });
 })();
