@@ -640,6 +640,7 @@ const whenHeroIntroReady = (callback) => {
   const dialog = modal?.querySelector(".demo-modal__dialog");
   const closeElements = modal?.querySelectorAll("[data-demo-modal-close]");
   const form = modal?.querySelector(".demo-modal__form");
+  const phoneInput = modal?.querySelector("#demo-modal-phone");
   const emailInput = modal?.querySelector("#demo-modal-email");
   const messageEl = modal?.querySelector(".demo-modal__message");
   const submitButton = modal?.querySelector(".demo-modal__submit-button");
@@ -652,6 +653,7 @@ const whenHeroIntroReady = (callback) => {
     !dialog ||
     !closeElements?.length ||
     !form ||
+    !phoneInput ||
     !emailInput ||
     !messageEl ||
     !submitButton ||
@@ -682,18 +684,23 @@ const whenHeroIntroReady = (callback) => {
     }
   };
 
-  const setEmailError = (isError, text) => {
+  const setFieldError = (field, isError, text) => {
     if (isError) {
-      emailInput.classList.add("demo-modal__input--error");
-      emailInput.setAttribute("aria-invalid", "true");
+      field.classList.add("demo-modal__input--error");
+      field.setAttribute("aria-invalid", "true");
       messageEl.id ||= "demo-modal-message";
-      emailInput.setAttribute("aria-describedby", messageEl.id);
+      field.setAttribute("aria-describedby", messageEl.id);
       setMessage(text, "error");
     } else {
-      emailInput.classList.remove("demo-modal__input--error");
-      emailInput.removeAttribute("aria-invalid");
-      emailInput.removeAttribute("aria-describedby");
-      setMessage("", null);
+      field.classList.remove("demo-modal__input--error");
+      field.removeAttribute("aria-invalid");
+      field.removeAttribute("aria-describedby");
+      if (
+        !phoneInput.classList.contains("demo-modal__input--error") &&
+        !emailInput.classList.contains("demo-modal__input--error")
+      ) {
+        setMessage("", null);
+      }
     }
   };
 
@@ -728,9 +735,11 @@ const whenHeroIntroReady = (callback) => {
     lastFocusedElement = document.activeElement;
     modal.removeAttribute("hidden");
     showFormScreen();
-    setEmailError(false);
+    setFieldError(phoneInput, false);
+    setFieldError(emailInput, false);
+    phoneInput.value = "";
     emailInput.value = "";
-    emailInput.focus();
+    phoneInput.focus();
 
     document.addEventListener("keydown", handleKeydown);
   };
@@ -740,7 +749,8 @@ const whenHeroIntroReady = (callback) => {
     modal.setAttribute("hidden", "");
     setLoading(false);
     showFormScreen();
-    setEmailError(false);
+    setFieldError(phoneInput, false);
+    setFieldError(emailInput, false);
     document.removeEventListener("keydown", handleKeydown);
     if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
       lastFocusedElement.focus();
@@ -774,6 +784,12 @@ const whenHeroIntroReady = (callback) => {
     }
   };
 
+  const isValidPhone = (value) => {
+    if (!value) return false;
+    const pattern = /^\+?[0-9\s\-().]{7,20}$/;
+    return pattern.test(value);
+  };
+
   const isValidEmail = (value) => {
     if (!value) return false;
     // Fallback au cas où la validation HTML5 ne suffit pas
@@ -781,11 +797,20 @@ const whenHeroIntroReady = (callback) => {
     return pattern.test(value);
   };
 
+  phoneInput.addEventListener("input", () => {
+    if (phoneInput.classList.contains("demo-modal__input--error")) {
+      const value = phoneInput.value.trim();
+      if (isValidPhone(value)) {
+        setFieldError(phoneInput, false);
+      }
+    }
+  });
+
   emailInput.addEventListener("input", () => {
     if (emailInput.classList.contains("demo-modal__input--error")) {
       const value = emailInput.value.trim();
       if (isValidEmail(value)) {
-        setEmailError(false);
+        setFieldError(emailInput, false);
       }
     }
   });
@@ -806,17 +831,30 @@ const whenHeroIntroReady = (callback) => {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const value = emailInput.value.trim();
-    setEmailError(false);
+    const phoneValue = phoneInput.value.trim();
+    const emailValue = emailInput.value.trim();
+    setFieldError(phoneInput, false);
+    setFieldError(emailInput, false);
 
-    if (!isValidEmail(value)) {
-      setEmailError(true, "Invalid email. Please re-enter your email.");
+    if (!isValidPhone(phoneValue)) {
+      setFieldError(
+        phoneInput,
+        true,
+        "Invalid phone number. Please re-enter your phone number.",
+      );
+      phoneInput.focus();
+      return;
+    }
+
+    if (!isValidEmail(emailValue)) {
+      setFieldError(emailInput, true, "Invalid email. Please re-enter your email.");
       emailInput.focus();
       return;
     }
 
     setLoading(true);
-    setEmailError(false);
+    setFieldError(phoneInput, false);
+    setFieldError(emailInput, false);
 
     window
       .fetch(EDGE_FUNCTION_SEND_DEMO_CONFIRMATION_URL, {
@@ -828,7 +866,7 @@ const whenHeroIntroReady = (callback) => {
           Authorization:
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlY3p4anN5a3NtcW9zdGxrdmRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NDkxMTYsImV4cCI6MjA4OTQyNTExNn0.NTWloTO7OkoAMOiz8TSi9LrJc1ZGRwDnxo-ImRRbhLw",
         },
-        body: JSON.stringify({ email: value }),
+        body: JSON.stringify({ email: emailValue, phone: phoneValue }),
       })
       .then(async (res) => {
         let data = null;
@@ -849,12 +887,13 @@ const whenHeroIntroReady = (callback) => {
           "Something went wrong while sending your confirmation email. Please try again.";
 
         setLoading(false);
-        setEmailError(true, message);
+        setFieldError(emailInput, true, message);
         emailInput.focus();
       })
       .catch(() => {
         setLoading(false);
-        setEmailError(
+        setFieldError(
+          emailInput,
           true,
           "Could not reach the email service. Please try again in a moment.",
         );
