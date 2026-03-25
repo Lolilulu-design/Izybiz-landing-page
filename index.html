@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Landing page</title>
+    <title>Izybiz</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -82,6 +82,32 @@
             Book a call
           </button>
         </div>
+
+        <section
+          class="hero-metrics"
+          aria-label="Key performance highlights"
+        >
+          <article class="hero-metrics__item">
+            <h2 class="hero-metrics__title">No Headcount bloat</h2>
+            <p class="hero-metrics__description">
+              Grow revenue without hiring.<br />Team stays lean.
+            </p>
+          </article>
+
+          <article class="hero-metrics__item">
+            <h2 class="hero-metrics__title">Faster workflows</h2>
+            <p class="hero-metrics__description">
+              Automate repetitive work.<br />People do strategic work.
+            </p>
+          </article>
+
+          <article class="hero-metrics__item">
+            <h2 class="hero-metrics__title">Capitalize on talent</h2>
+            <p class="hero-metrics__description">
+              Invest once.<br />AI multiplies what they know
+            </p>
+          </article>
+        </section>
 
         <section
           class="we-deliver"
@@ -227,46 +253,80 @@
       <section class="section-two" id="we-do" aria-label="Case studies">
         <div class="section-two__inner">
           <header class="section-two__intro">
-            <h2 class="section-two__title">Our use cases</h2>
+            <h2 class="section-two__title" id="case-studies-heading">Our use cases</h2>
+            <div class="section-two__topbar" aria-label="Case studies navigation">
+              <div
+                class="section-two__tabs"
+                role="tablist"
+                aria-label="Case studies tabs"
+                data-case-tablist
+              >
+                <button class="section-two__tab is-active" type="button" role="tab" data-case-tab>
+                  Telecom &amp; Fintech · Africa
+                </button>
+                <button class="section-two__tab" type="button" role="tab" data-case-tab>
+                  Community Marketplace · Africa
+                </button>
+                <button class="section-two__tab" type="button" role="tab" data-case-tab>
+                  Community Cooking · Europe
+                </button>
+                <button class="section-two__tab" type="button" role="tab" data-case-tab>
+                  Agentic Delivery · France
+                </button>
+              </div>
+
+              <div class="section-two__mobile-nav">
+                <span
+                  class="section-two__counter"
+                  data-case-counter
+                  aria-live="polite"
+                  aria-atomic="true"
+                  >1/4</span
+                >
+                <div class="section-two__controls">
+                  <button
+                    class="section-two__arrow section-two__arrow--prev"
+                    type="button"
+                    data-case-prev
+                    aria-label="Previous case study"
+                  >
+                    <span aria-hidden="true">&#8592;</span>
+                  </button>
+                  <button
+                    class="section-two__arrow section-two__arrow--next"
+                    type="button"
+                    data-case-next
+                    aria-label="Next case study"
+                  >
+                    <span aria-hidden="true">&#8594;</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </header>
 
-          <div class="section-two__grid" aria-label="Case studies list">
+          <div
+            class="section-two__grid"
+            aria-label="Case studies carousel"
+            aria-labelledby="case-studies-heading"
+          >
             <article
               class="section-two__case section-two__case--yellow"
               tabindex="0"
               aria-label="Case study 1"
             >
               <div class="section-two__case-copy">
-                <span class="section-two__case-label">Coming soon</span>
+                <span class="section-two__case-label">Delivered</span>
                 <h3 class="section-two__case-title">
-                  Product redesign in days
+                  Telecom &amp; Fintech · Africa
                 </h3>
                 <p class="section-two__case-description">
-                  A legacy SaaS needed a complete UX/UI overhaul to match a new
-                  positioning. We deployed our Agent Factory to redesign,
-                  systemize, and ship production-ready screens
+                  A telecom operator needed to launch a super-app across two
+                  markets simultaneously — two distinct operating scenarios,
+                  multiple stakeholders, under acquisition pressure. We scoped
+                  and build the product, structured two distinct go-to-market
+                  scenarios — the client chose one and deployed it.
                 </p>
-              </div>
-
-              <div class="section-two__case-visual" aria-hidden="true">
-                <div
-                  class="section-two__visual-frame section-two__visual-frame--purple"
-                >
-                  <div class="section-two__phone" aria-hidden="true">
-                    <div class="section-two__phone-frame">
-                      <div class="section-two__phone-notch"></div>
-                      <div class="section-two__phone-screen">
-                        <div class="section-two__phone-content">
-                          <div class="section-two__phone-card"></div>
-                          <div
-                            class="section-two__phone-card section-two__phone-card--ghost"
-                          ></div>
-                          <div class="section-two__phone-cta"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </article>
 
@@ -276,40 +336,57 @@
               aria-label="Case study 2"
             >
               <div class="section-two__case-copy">
-                <span class="section-two__case-label">Coming soon</span>
+                <span class="section-two__case-label">Delivered</span>
                 <h3 class="section-two__case-title">
-                  From ideas to production
+                  Community Marketplace · Africa
                 </h3>
                 <p class="section-two__case-description">
-                  A company had multiple product ideas but no way to ship them
-                  fast. We turned each idea into a production-ready solution —
-                  fully integrated with their systems and ready for customers.
+                  An e-commerce marketplace had to go from zero to a viable
+                  market in under two years — positioning, branding,
+                  organization, go-to-market, and building an engaged community
+                  of buyers and sellers. We structured and led end-to-end
+                  delivery to €1.25M GMV in 18 months.
                 </p>
               </div>
+            </article>
 
-              <div class="section-two__case-visual" aria-hidden="true">
-                <div
-                  class="section-two__visual-frame section-two__visual-frame--dark"
-                >
-                  <div class="section-two__visual-badge" aria-hidden="true">
-                    <span
-                      class="section-two__badge-dot section-two__badge-dot--yellow"
-                    ></span>
-                    <span
-                      class="section-two__badge-dot section-two__badge-dot--pink"
-                    ></span>
-                    <span
-                      class="section-two__badge-dot section-two__badge-dot--blue"
-                    ></span>
-                  </div>
-                  <div
-                    class="section-two__visual-card section-two__visual-card--wide"
-                    aria-hidden="true"
-                  >
-                    <div class="section-two__visual-card-header"></div>
-                    <div class="section-two__visual-card-body"></div>
-                  </div>
-                </div>
+            <article
+              class="section-two__case section-two__case--white"
+              tabindex="0"
+              aria-label="Case study 3"
+            >
+              <div class="section-two__case-copy">
+                <span class="section-two__case-label">In progress</span>
+                <h3 class="section-two__case-title">
+                  Community Cooking · Europe
+                </h3>
+                <p class="section-two__case-description">
+                  A cooking enthusiast wanted to turn daily meal prep into a
+                  driver of social connection and savings. We structured a
+                  "collective cooking at home" operational model and designed
+                  the product experience through a mobile app orchestrating
+                  batch cooking sessions — built around a Triple Gain: 50% cost
+                  savings, time efficiency, and wellbeing.
+                </p>
+              </div>
+            </article>
+
+            <article
+              class="section-two__case section-two__case--violet"
+              tabindex="0"
+              aria-label="Case study 4"
+            >
+              <div class="section-two__case-copy">
+                <span class="section-two__case-label">Starting</span>
+                <h3 class="section-two__case-title">
+                  Agentic Delivery · France
+                </h3>
+                <p class="section-two__case-description">
+                  A French software company needed to scale client deployments
+                  without scaling headcount. We are designing a system of
+                  autonomous AI agents under human supervision to orchestrate
+                  and deliver client projects — from onboarding to go-live.
+                </p>
               </div>
             </article>
           </div>
@@ -532,6 +609,41 @@
                 </div>
               </div>
             </article>
+
+            <article class="faq-item" data-faq-item>
+              <h3 class="faq-item__heading">
+                <button
+                  class="faq-item__question"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="faq-a-7"
+                  id="faq-q-7"
+                  data-faq-trigger
+                >
+                  <span class="faq-item__question-bg" aria-hidden="true"></span>
+                  <span class="faq-item__label">Who are we?</span>
+                </button>
+              </h3>
+              <div
+                class="faq-item__answers"
+                id="faq-a-7"
+                role="region"
+                aria-labelledby="faq-q-7"
+                data-faq-panel
+                hidden
+              >
+                <div class="faq-item__pad">
+                  <div class="faq-item__bubble">
+                    <p class="faq-item__answer">
+                      IZYBIZ is a two-person team: a seasoned operator with
+                      20+ years across Telco, Banking, BPO, SaaS, and
+                      e-commerce, paired with a UX designer who brings fresh
+                      eyes and user-first thinking.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>
@@ -550,12 +662,53 @@
             <a class="section-contact__cta" href="#contact" data-demo-modal-open
               >Email us</a
             >
-            <a class="section-contact__secondary" href="#we-do"
-              >See our case studies</a
-            >
           </div>
         </div>
       </section>
+
+      <footer class="site-footer" aria-label="Footer">
+        <div class="site-footer__inner">
+          <div class="site-footer__top">
+            <img
+              class="site-footer__logo"
+              src="./assets/Logo Izybiz.png"
+              alt="IZYBIZ"
+            />
+
+            <a
+              class="site-footer__linkedin"
+              href="https://www.linkedin.com/company/izybiz/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn Izybiz"
+            >
+              <img
+                class="site-footer__linkedin-icon"
+                src="./assets/linkedin-icon.png"
+                alt="LinkedIn"
+              />
+            </a>
+          </div>
+
+          <div class="site-footer__bottom">
+            <div class="site-footer__copyright">
+              © 2026 Izybiz All rights reserved
+            </div>
+
+            <nav class="site-footer__nav" aria-label="Footer navigation">
+              <a class="site-footer__nav-link" href="#we-deliver"
+                >We deliver</a
+              >
+              <a class="site-footer__nav-link" href="#we-do"
+                >We create</a
+              >
+              <a class="site-footer__nav-link" href="#faq"
+                >We answer</a
+              >
+            </nav>
+          </div>
+        </div>
+      </footer>
     </main>
 
     <!-- Book a demo modal -->

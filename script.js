@@ -357,6 +357,229 @@ const isElementInViewport = (element) => {
   });
 })();
 
+(() => {
+  const sectionTwo = document.querySelector("#we-do");
+  if (!sectionTwo) return;
+
+  const grid = sectionTwo.querySelector(".section-two__grid");
+  const cases = Array.from(sectionTwo.querySelectorAll(".section-two__case"));
+  const prevButton = sectionTwo.querySelector("[data-case-prev]");
+  const nextButton = sectionTwo.querySelector("[data-case-next]");
+  const counter = sectionTwo.querySelector("[data-case-counter]");
+  const tabs = Array.from(sectionTwo.querySelectorAll("[data-case-tab]"));
+
+  if (!grid || cases.length < 2) return;
+
+  grid.classList.add("section-two__grid--carousel");
+
+  let currentIndex = 0;
+  let isTransitioning = false;
+  const TRANSITION_DURATION_MS = 320;
+  const DRAG_SWIPE_THRESHOLD_PX = 56;
+  let pointerDragState = null;
+
+  const syncCarouselHeight = () => {
+    const previousHeight = grid.style.height;
+    grid.style.height = "auto";
+
+    let maxHeight = 0;
+    cases.forEach((caseEl) => {
+      const caseHeight = caseEl.offsetHeight;
+      if (caseHeight > maxHeight) {
+        maxHeight = caseHeight;
+      }
+    });
+
+    grid.style.height = maxHeight > 0 ? `${maxHeight}px` : previousHeight;
+  };
+
+  const updateUI = () => {
+    const total = cases.length;
+    const activeCase = cases[currentIndex];
+
+    if (activeCase) {
+      const accent = window
+        .getComputedStyle(activeCase)
+        .getPropertyValue("--case-accent")
+        .trim();
+      const activeCaseColor =
+        accent ||
+        window.getComputedStyle(activeCase).backgroundColor;
+      sectionTwo.style.setProperty("--section-two-active-line", activeCaseColor);
+    }
+
+    if (counter) {
+      counter.textContent = `${currentIndex + 1}/${total}`;
+    }
+
+    if (prevButton) {
+      prevButton.disabled = currentIndex === 0;
+    }
+
+    if (nextButton) {
+      nextButton.disabled = currentIndex === total - 1;
+    }
+
+    cases.forEach((caseEl, index) => {
+      const isActive = index === currentIndex;
+      caseEl.classList.toggle("is-active", isActive);
+      caseEl.setAttribute("aria-hidden", String(!isActive));
+      caseEl.setAttribute("aria-label", `Case study ${index + 1}`);
+      caseEl.tabIndex = isActive ? 0 : -1;
+    });
+
+    if (tabs.length) {
+      tabs.forEach((tab, index) => {
+        const isActive = index === currentIndex;
+        tab.classList.toggle("is-active", isActive);
+        tab.setAttribute("aria-selected", String(isActive));
+        tab.tabIndex = isActive ? 0 : -1;
+      });
+    }
+  };
+
+  const goTo = (nextIndex) => {
+    const clampedIndex = Math.max(0, Math.min(nextIndex, cases.length - 1));
+    if (clampedIndex === currentIndex || isTransitioning) return;
+
+    const outgoingCase = cases[currentIndex];
+    isTransitioning = true;
+    outgoingCase?.classList.add("is-outgoing");
+
+    currentIndex = clampedIndex;
+    updateUI();
+    const incomingCase = cases[currentIndex];
+
+    if (incomingCase) {
+      incomingCase.classList.add("is-entering");
+    }
+
+    window.requestAnimationFrame(() => {
+      if (outgoingCase) {
+        outgoingCase.classList.add("is-exiting");
+      }
+
+      if (incomingCase) {
+        incomingCase.classList.add("is-entering-active");
+      }
+    });
+
+    window.setTimeout(() => {
+      outgoingCase?.classList.remove("is-outgoing", "is-exiting");
+      incomingCase?.classList.remove("is-entering", "is-entering-active");
+      isTransitioning = false;
+      updateUI();
+    }, TRANSITION_DURATION_MS);
+  };
+
+  const cleanupPointerDrag = () => {
+    pointerDragState = null;
+    grid.classList.remove("is-dragging");
+  };
+
+  const onPointerDown = (event) => {
+    if (isTransitioning) return;
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+
+    pointerDragState = {
+      id: event.pointerId,
+      startX: event.clientX,
+      deltaX: 0,
+    };
+    grid.classList.add("is-dragging");
+
+    if (typeof grid.setPointerCapture === "function") {
+      try {
+        grid.setPointerCapture(event.pointerId);
+      } catch {
+        // no-op
+      }
+    }
+  };
+
+  const onPointerMove = (event) => {
+    if (!pointerDragState) return;
+    if (event.pointerId !== pointerDragState.id) return;
+    pointerDragState.deltaX = event.clientX - pointerDragState.startX;
+  };
+
+  const onPointerUp = (event) => {
+    if (!pointerDragState) return;
+    if (event.pointerId !== pointerDragState.id) return;
+
+    const traveledX = pointerDragState.deltaX;
+    cleanupPointerDrag();
+
+    if (typeof grid.releasePointerCapture === "function") {
+      try {
+        grid.releasePointerCapture(event.pointerId);
+      } catch {
+        // no-op
+      }
+    }
+
+    if (Math.abs(traveledX) < DRAG_SWIPE_THRESHOLD_PX) return;
+
+    if (traveledX < 0) {
+      goTo(currentIndex + 1);
+      return;
+    }
+
+    goTo(currentIndex - 1);
+  };
+
+  const onPointerCancel = (event) => {
+    if (!pointerDragState) return;
+    if (event.pointerId !== pointerDragState.id) return;
+    cleanupPointerDrag();
+
+    if (typeof grid.releasePointerCapture === "function") {
+      try {
+        grid.releasePointerCapture(event.pointerId);
+      } catch {
+        // no-op
+      }
+    }
+  };
+
+  prevButton?.addEventListener("click", () => {
+    goTo(currentIndex - 1);
+  });
+
+  nextButton?.addEventListener("click", () => {
+    goTo(currentIndex + 1);
+  });
+
+  if (tabs.length) {
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => {
+        goTo(index);
+      });
+    });
+  }
+
+  grid.addEventListener("pointerdown", onPointerDown);
+  grid.addEventListener("pointermove", onPointerMove);
+  grid.addEventListener("pointerup", onPointerUp);
+  grid.addEventListener("pointercancel", onPointerCancel);
+
+  sectionTwo.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      goTo(currentIndex - 1);
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      goTo(currentIndex + 1);
+    }
+  });
+
+  syncCarouselHeight();
+  window.addEventListener("resize", syncCarouselHeight);
+  updateUI();
+})();
+
 // FAQ reveal (title first, then questions one by one)
 (() => {
   whenTitleAnimationDone(() => {
