@@ -140,6 +140,102 @@ const isElementInViewport = (element) => {
 
 (() => {
   whenHeroIntroReady(() => {
+    const metricsSection = document.querySelector(".hero-metrics");
+    const metricTitles = Array.from(
+      document.querySelectorAll(".hero-metrics__title[data-count-to]"),
+    );
+    if (!metricsSection || !metricTitles.length) return;
+
+    const prefersReducedMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    )?.matches;
+
+    const easeOutCubic = (t) => 1 - (1 - t) ** 3;
+
+    const setMetricValue = (el, value) => {
+      el.textContent = `${value}%`;
+    };
+
+    const animateCountUp = (el, target, duration) => {
+      let startTime = null;
+
+      const step = (timestamp) => {
+        if (startTime === null) {
+          startTime = timestamp;
+        }
+
+        const elapsed = timestamp - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easedProgress = easeOutCubic(progress);
+        const nextValue = Math.round(target * easedProgress);
+
+        setMetricValue(el, nextValue);
+
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+          return;
+        }
+
+        // Ensure exact final value after rounded intermediate frames.
+        setMetricValue(el, target);
+      };
+
+      window.requestAnimationFrame(step);
+    };
+
+    const metricData = metricTitles
+      .map((el) => {
+        const rawTarget = Number.parseInt(el.dataset.countTo || "", 10);
+        return Number.isFinite(rawTarget) ? { el, target: rawTarget } : null;
+      })
+      .filter(Boolean);
+
+    if (!metricData.length) return;
+
+    if (prefersReducedMotion) {
+      metricData.forEach(({ el, target }) => setMetricValue(el, target));
+      return;
+    }
+
+    let hasAnimated = false;
+    const runCountUp = () => {
+      if (hasAnimated) return;
+      hasAnimated = true;
+
+      metricData.forEach(({ el, target }, idx) => {
+        const staggerDelay = idx * 120;
+        const duration = 1200 + idx * 180;
+        window.setTimeout(() => {
+          animateCountUp(el, target, duration);
+        }, staggerDelay);
+      });
+    };
+
+    if (isElementInViewport(metricsSection)) {
+      runCountUp();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          runCountUp();
+          obs.disconnect();
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: "0px 0px -8% 0px",
+      },
+    );
+
+    observer.observe(metricsSection);
+  });
+})();
+
+(() => {
+  whenHeroIntroReady(() => {
     const title = document.querySelector("#we-deliver-title.we-deliver__title");
     const cards = Array.from(document.querySelectorAll(".we-deliver__card"));
     const weDeliverSection =
@@ -378,21 +474,19 @@ const isElementInViewport = (element) => {
   let isTransitioning = false;
   const TRANSITION_DURATION_MS = 320;
   const DRAG_SWIPE_THRESHOLD_PX = 56;
+  const mobileMq = window.matchMedia("(max-width: 767px)");
   let pointerDragState = null;
 
   const syncCarouselHeight = () => {
-    const previousHeight = grid.style.height;
-    grid.style.height = "auto";
-
-    let maxHeight = 0;
-    cases.forEach((caseEl) => {
-      const caseHeight = caseEl.offsetHeight;
-      if (caseHeight > maxHeight) {
-        maxHeight = caseHeight;
+    if (mobileMq.matches) {
+      const activeCase = cases[currentIndex];
+      if (activeCase) {
+        grid.style.height = `${activeCase.offsetHeight}px`;
+        return;
       }
-    });
+    }
 
-    grid.style.height = maxHeight > 0 ? `${maxHeight}px` : previousHeight;
+    grid.style.height = "420px";
   };
 
   const updateUI = () => {
@@ -438,6 +532,8 @@ const isElementInViewport = (element) => {
         tab.tabIndex = isActive ? 0 : -1;
       });
     }
+
+    syncCarouselHeight();
   };
 
   const goTo = (nextIndex) => {
@@ -577,7 +673,6 @@ const isElementInViewport = (element) => {
     }
   });
 
-  syncCarouselHeight();
   window.addEventListener("resize", syncCarouselHeight);
   updateUI();
 })();

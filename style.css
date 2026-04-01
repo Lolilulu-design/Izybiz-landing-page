@@ -699,11 +699,11 @@ input[type="reset"] {
 
 .hero-metrics__title {
   max-width: var(--hero-metrics-title-width);
-  margin: 0 auto;
+  margin: 0 auto 32px;
   color: #fbf2e6;
   font-family: "Bricolage Grotesque", sans-serif;
   font-optical-sizing: auto;
-  font-size: clamp(30px, 2.8vw, 42px);
+  font-size: clamp(38px, 3.6vw, 56px);
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -0.25px;
@@ -713,7 +713,7 @@ input[type="reset"] {
 
 .hero-metrics__description {
   max-width: var(--hero-metrics-description-width);
-  margin: 10px auto 0;
+  margin: 0 auto;
   color: #fbf2e6;
   font-family: "Didact Gothic", sans-serif;
   font-size: clamp(18px, 1.45vw, 26px);
@@ -866,7 +866,7 @@ input[type="reset"] {
   transform: translateY(0);
 }
 
-h2:not(.we-deliver__title) {
+h2:not(.we-deliver__title):not(.hero-metrics__title) {
   margin-bottom: var(--h2-below-spacing);
 }
 
@@ -1028,7 +1028,7 @@ h2:not(.we-deliver__title) {
   justify-content: center;
   width: max-content;
   max-width: 100%;
-  padding: 7px 12px;
+  padding: 7px 16px;
   border-radius: 100px;
   background: #ffffff;
   color: #000000;
@@ -1317,7 +1317,8 @@ h2:not(.we-deliver__title) {
   width: 100%;
   max-width: calc((442px * 3) + (16px * 2));
   margin: 0 auto;
-  padding: 72px clamp(16px, 3vw, 28px) 18px clamp(16px, 3vw, 28px);
+  padding: 72px clamp(16px, 3vw, 28px) var(--section-stack-gap)
+    clamp(16px, 3vw, 28px);
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -1502,6 +1503,7 @@ h2:not(.we-deliver__title) {
 
 .section-two__grid--carousel {
   position: relative;
+  height: 420px;
   min-height: 420px;
   overflow: hidden;
   --case-fade-duration: 320ms;
@@ -2239,7 +2241,11 @@ h2:not(.we-deliver__title) {
 
 @media (max-width: 767px) {
   .section-two__inner {
-    padding: 48px 16px 14px 16px;
+    padding: 48px 16px var(--section-stack-gap) 16px;
+  }
+
+  .section-two__grid--carousel {
+    min-height: 0;
   }
 
   .section-two__intro {
