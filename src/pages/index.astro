@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+import HomeContent from "../components/HomeContent.astro";
+import HomeContentEs from "../components/HomeContentEs.astro";
+import HomeContentFr from "../components/HomeContentFr.astro";
+import { getLangFromUrl } from "../i18n/translations";
+
+const lang = (Astro.currentLocale || getLangFromUrl(Astro.url)) as "fr" | "en" | "es";
+---
+
+<Layout
+  lang={lang}
+  title="Izybiz | Accueil"
+  description="Izybiz accompagne la transformation et l'integration IA."
+  includeGlobalScript={true}
+>
+  {lang === "es" ? <HomeContentEs /> : lang === "fr" ? <HomeContentFr /> : <HomeContent />}
+</Layout>

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://izybiz.fr/sitemap-index.xml
