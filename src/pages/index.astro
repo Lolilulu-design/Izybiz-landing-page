@@ -11,7 +11,7 @@ const lang = (Astro.currentLocale || getLangFromUrl(Astro.url)) as "fr" | "en" |
 <Layout
   lang={lang}
   title="Izybiz | Accueil"
-  description="Izybiz accompagne la transformation et l'integration IA."
+  description="Izybiz accompagne la transformation et l'intégration IA."
   includeGlobalScript={true}
 >
   {lang === "es" ? <HomeContentEs /> : lang === "fr" ? <HomeContentFr /> : <HomeContent />}

@@ -1,7 +1,7 @@
 export const languages = {
-  fr: "Francais",
+  fr: "Français",
   en: "English",
-  es: "Espanol",
+  es: "Español",
 } as const;
 
 export const defaultLang = "fr";
@@ -9,11 +9,11 @@ export const fallbackLang = "en";
 
 export const ui = {
   fr: {
-    "nav.deliver": "Ce qu'on delivre",
+    "nav.deliver": "Ce qu'on délivre",
     "nav.cases": "Cas d'usage",
     "nav.faq": "Questions",
     "nav.blog": "Blog",
-    "nav.about": "A propos",
+    "nav.about": "À propos",
     "nav.contact": "Contact",
     "cta.book": "Prendre contact",
     "cta.linkedin": "Message LinkedIn",
@@ -35,17 +35,17 @@ export const ui = {
     "blog.subtitle": "Executive insights on transformation and AI",
   },
   es: {
-    "nav.deliver": "Que entregamos",
+    "nav.deliver": "Qué entregamos",
     "nav.cases": "Casos de uso",
     "nav.faq": "Preguntas",
     "nav.blog": "Blog",
-    "nav.about": "Sobre mi",
+    "nav.about": "Sobre mí",
     "nav.contact": "Contacto",
     "cta.book": "Reservar llamada",
     "cta.linkedin": "Mensaje LinkedIn",
-    "blog.readmore": "Leer articulo",
+    "blog.readmore": "Leer artículo",
     "blog.title": "Blog",
-    "blog.subtitle": "Perspectivas directivas sobre transformacion e IA",
+    "blog.subtitle": "Perspectivas directivas sobre transformación e IA",
   },
 } as const;
 
