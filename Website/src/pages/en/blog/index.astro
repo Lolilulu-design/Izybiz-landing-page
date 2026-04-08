@@ -1,0 +1,33 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { useTranslations } from "../../../i18n/translations";
+
+const lang = "en";
+const t = useTranslations(lang);
+const posts = (await getCollection("blog-en")).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout lang={lang} title="Izybiz | Blog" description="Izybiz blog">
+  <main class="page-shell">
+    <section class="section-two">
+      <div class="section-two__inner">
+        <header class="section-two__intro">
+          <h1 class="section-two__title">{t("blog.title")}</h1>
+          <p class="section-two__subtitle">{t("blog.subtitle")}</p>
+        </header>
+        <div class="section-two__grid">
+          {posts.map((post) => (
+            <article class="section-two__case section-two__case--yellow">
+              <div class="section-two__case-copy">
+                <h2 class="section-two__case-title">{post.data.title}</h2>
+                <p class="section-two__case-description">{post.data.description}</p>
+                <a class="hero-izybiz__button" href={`/en/blog/${post.slug}`}>{t("blog.readmore")}</a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

@@ -1,0 +1,29 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog-es");
+  return posts.map((post) => ({ params: { slug: post.id.replace(/\.md$/, "") }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const lang = "es";
+---
+
+<Layout lang={lang} title={`Izybiz | ${post.data.title}`} description={post.data.description}>
+  <main class="page-shell">
+    <section class="section-two">
+      <div class="section-two__inner">
+        <article class="section-two__case section-two__case--blue">
+          <div class="section-two__case-copy">
+            <h1 class="section-two__case-title">{post.data.title}</h1>
+            <p class="section-two__case-description">{post.data.description}</p>
+            <Content />
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</Layout>

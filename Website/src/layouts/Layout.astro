@@ -1,0 +1,144 @@
+---
+import {
+  defaultLang,
+  getLocalizedPath,
+  mapPathToLang,
+  type Lang,
+  useTranslations,
+} from "../i18n/translations";
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  canonicalPath?: string;
+  includeGlobalScript?: boolean;
+}
+
+const {
+  title,
+  description,
+  lang,
+  canonicalPath = Astro.url.pathname,
+  includeGlobalScript = false,
+} = Astro.props;
+
+const t = useTranslations(lang);
+const cleanPath = canonicalPath.endsWith("/") ? canonicalPath.slice(0, -1) || "/" : canonicalPath;
+const canonicalUrl = `https://izybiz.fr${cleanPath}`;
+const localizedAlt = {
+  fr: mapPathToLang(cleanPath, "fr"),
+  en: mapPathToLang(cleanPath, "en"),
+  es: mapPathToLang(cleanPath, "es"),
+};
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <script is:inline>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-T6W62FCN");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75,200..800&family=Didact+Gothic&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="/assets/fav-icon.png" type="image/png" />
+    <link rel="stylesheet" href="/src/styles/global.css" />
+
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="fr" href={`https://izybiz.fr${localizedAlt.fr}`} />
+    <link rel="alternate" hreflang="en" href={`https://izybiz.fr${localizedAlt.en}`} />
+    <link rel="alternate" hreflang="es" href={`https://izybiz.fr${localizedAlt.es}`} />
+    <link rel="alternate" hreflang="x-default" href={`https://izybiz.fr${localizedAlt.en}`} />
+  </head>
+  <body class="intro-stage-1" id="top">
+    <header class="site-header" aria-label="Site header">
+      <div class="site-header__pill">
+        <a class="site-header__brand" href={getLocalizedPath("home", lang)} aria-label="Go to top">
+          <img src="/assets/Logo Izybiz.png" alt="IZYBIZ" />
+        </a>
+
+        <nav class="site-nav" aria-label="Primary">
+          <span class="site-nav__links-group">
+            <a class="site-nav__link" href="#we-deliver">{t("nav.deliver")}</a>
+            <span class="site-nav__divider" aria-hidden="true"></span>
+            <a class="site-nav__link" href="#we-do">{t("nav.cases")}</a>
+            <span class="site-nav__divider" aria-hidden="true"></span>
+            <a class="site-nav__link" href="#faq">{t("nav.faq")}</a>
+          </span>
+        </nav>
+
+        <div class="site-nav__actions" aria-label="Primary actions">
+          <button class="site-nav__button site-nav__button--book" type="button" data-demo-modal-open>
+            {t("cta.book")}
+          </button>
+          <a
+            class="site-nav__button site-nav__button--linkedin"
+            href="https://www.linkedin.com/company/izybiz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open the IZYBIZ LinkedIn page in a new tab"
+          >
+            {t("cta.linkedin")}
+          </a>
+          <div class="site-nav__lang" aria-label="Language switcher">
+            <a href={mapPathToLang(Astro.url.pathname, "fr")} aria-current={lang === "fr" ? "true" : undefined}>FR</a>
+            |
+            <a href={mapPathToLang(Astro.url.pathname, "en")} aria-current={lang === "en" ? "true" : undefined}>EN</a>
+            |
+            <a href={mapPathToLang(Astro.url.pathname, "es")} aria-current={lang === "es" ? "true" : undefined}>ES</a>
+          </div>
+        </div>
+
+        <button
+          class="site-nav__toggle"
+          type="button"
+          aria-label="Open menu"
+          aria-controls="site-nav-menu"
+          aria-expanded="false"
+          data-nav-toggle
+        >
+          <span class="site-nav__toggle-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="site-nav__menu" id="site-nav-menu" hidden data-nav-menu>
+        <a class="site-nav__menu-link" href="#we-deliver">{t("nav.deliver")}</a>
+        <a class="site-nav__menu-link" href="#we-do">{t("nav.cases")}</a>
+        <a class="site-nav__menu-link" href="#faq">{t("nav.faq")}</a>
+        <button class="site-nav__menu-link" type="button" data-demo-modal-open>{t("cta.book")}</button>
+        <a
+          class="site-nav__menu-link"
+          href="https://www.linkedin.com/company/izybiz/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Open the IZYBIZ LinkedIn page in a new tab"
+        >
+          {t("cta.linkedin")}
+        </a>
+      </div>
+    </header>
+    <slot />
+    <script is:inline>
+      window.__IZYBIZ_LANG = "{lang}";
+      window.__IZYBIZ_DEFAULT_LANG = "{defaultLang}";
+    </script>
+    {includeGlobalScript ? <script is:inline src="/script.js"></script> : null}
+  </body>
+</html>
