@@ -1,0 +1,22 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const lang = "fr";
+---
+
+<Layout
+  lang={lang}
+  title="Message envoyé — Izybiz"
+  description="Votre message a bien été reçu. Réponse sous 48h."
+  includeGlobalScript={true}
+>
+  <main>
+    <article class="article-page">
+      <h1 class="article-page__title">Message envoyé</h1>
+      <p class="article-page__description">Merci pour votre message. Vous recevrez une réponse sous 48h avec une proposition de créneau.</p>
+      <div class="article-page__body">
+        <p><a href="/">Retour à l'accueil</a></p>
+      </div>
+    </article>
+  </main>
+</Layout>

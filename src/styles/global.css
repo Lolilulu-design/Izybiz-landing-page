@@ -3257,3 +3257,68 @@ h2:not(.we-deliver__title):not(.hero-metrics__title) {
     overflow-x: auto;
   }
 }
+
+/* Contact form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 2rem 0;
+}
+
+.contact-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.contact-form__label {
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0f172a;
+  letter-spacing: 0.01em;
+}
+
+.contact-form__input,
+.contact-form__textarea {
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 1rem;
+  color: #0f172a;
+  background: #fff;
+  border: 1.5px solid rgba(15, 23, 42, 0.2);
+  border-radius: 8px;
+  padding: 0.625rem 0.875rem;
+  transition: border-color 200ms ease;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.contact-form__input:focus,
+.contact-form__textarea:focus {
+  border-color: #0f172a;
+}
+
+.contact-form__textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact-form__submit {
+  align-self: flex-start;
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: #0f172a;
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 2rem;
+  cursor: pointer;
+  transition: opacity 200ms ease;
+}
+
+.contact-form__submit:hover {
+  opacity: 0.85;
+}

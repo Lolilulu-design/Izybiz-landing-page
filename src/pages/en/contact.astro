@@ -6,21 +6,68 @@ const lang = "en";
 
 <Layout
   lang={lang}
-  title="Izybiz | Contact"
-  description="Contact page"
+  title="Contact an Interim Management Consultant — Izybiz"
+  description="30-minute call to assess whether your situation calls for interim management or AI integration. No pitch. Response within 48 hours."
+  includeGlobalScript={true}
+  canonicalPath="/en/contact"
+  alternates={{ fr: "/contact", en: "/en/contact", es: "/es/contacto" }}
 >
-  <main class="page-shell">
-    <section class="section-one" aria-label="Page content">
-      <div class="hero-izybiz">
-        <div class="hero-izybiz__text">
-          <h1 class="hero-izybiz__title">
-            <span class="hero-izybiz__title-line hero-izybiz__title-line--visible">Contact</span>
-          </h1>
-          <p class="hero-izybiz__subtitle hero-izybiz__subtitle--visible">
-            <span>Content coming soon.</span>
-          </p>
-        </div>
+  <main>
+    <article class="article-page">
+      <h1 class="article-page__title">Get in touch</h1>
+      <p class="article-page__description">No sales pitch. A 30-minute call to assess whether your situation calls for interim management or AI integration — and whether Izybiz is the right profile.</p>
+
+      <div class="article-page__body">
+        <h2>What happens after you reach out</h2>
+        <ol>
+          <li><strong>Response within 48 hours</strong> — with a proposed slot for a phone or video call.</li>
+          <li><strong>30-minute discovery call</strong> — you describe your situation, your challenges, your time constraint.</li>
+          <li><strong>If relevant</strong> — I propose an assignment framing. You decide.</li>
+        </ol>
+        <p>No commitment at any stage.</p>
+
+        <form
+          class="contact-form"
+          name="contact-en"
+          method="POST"
+          netlify
+          netlify-honeypot="bot-field"
+          action="/en/contact/thank-you"
+        >
+          <input type="hidden" name="form-name" value="contact-en" />
+          <p hidden><label>Do not fill: <input name="bot-field" /></label></p>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="name">Name *</label>
+            <input class="contact-form__input" type="text" id="name" name="name" placeholder="First Last" required />
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="company">Company</label>
+            <input class="contact-form__input" type="text" id="company" name="company" placeholder="Company name" />
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="role">Role</label>
+            <input class="contact-form__input" type="text" id="role" name="role" placeholder="Your title" />
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="email">Email *</label>
+            <input class="contact-form__input" type="email" id="email" name="email" placeholder="your@email.com" required />
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="situation">Your situation *</label>
+            <textarea class="contact-form__textarea" id="situation" name="situation" rows="5" placeholder="What is the challenge, what is the urgency, what has already been tried." required></textarea>
+          </div>
+
+          <button class="contact-form__submit" type="submit">Send</button>
+        </form>
+
+        <hr />
+        <p><em>You can also find Stéphane on <a href="https://www.linkedin.com/company/izybiz/" target="_blank" rel="noopener noreferrer">LinkedIn</a> before reaching out.</em></p>
       </div>
-    </section>
+    </article>
   </main>
 </Layout>
