@@ -1,0 +1,20 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  lang="fr"
+  title="Page introuvable — Izybiz"
+  description="Cette page n'existe pas ou a été déplacée."
+  includeGlobalScript={true}
+>
+  <main>
+    <article class="article-page error-page">
+      <h1 class="article-page__title">404</h1>
+      <p class="article-page__description">Cette page n'existe pas ou a été déplacée.</p>
+      <div class="article-page__body">
+        <p>Vous pouvez retourner à l'<a href="/">accueil</a>, consulter le <a href="/blog">blog</a> ou explorer nos <a href="/services">services</a>.</p>
+      </div>
+    </article>
+  </main>
+</Layout>
