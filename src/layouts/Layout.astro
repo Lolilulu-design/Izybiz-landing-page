@@ -177,6 +177,33 @@ const localizedAlt = {
       </div>
     </header>
     <slot />
+    <footer class="site-footer" aria-label="Footer">
+      <div class="site-footer__inner">
+        <div class="site-footer__top">
+          <a href={getLocalizedPath("home", lang)} aria-label="Accueil Izybiz">
+            <img class="site-footer__logo" src="/assets/Logo Izybiz.png" alt="IZYBIZ" />
+          </a>
+          <a
+            class="site-footer__linkedin"
+            href="https://www.linkedin.com/company/izybiz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn Izybiz"
+          >
+            <img class="site-footer__linkedin-icon" src="/assets/linkedin-icon.png" alt="LinkedIn" />
+          </a>
+        </div>
+        <div class="site-footer__bottom">
+          <div class="site-footer__copyright">{t("footer.copyright")}</div>
+          <nav class="site-footer__nav" aria-label="Footer navigation">
+            <a class="site-footer__nav-link" href={getLocalizedPath("about", lang)}>{t("nav.about")}</a>
+            <a class="site-footer__nav-link" href={getLocalizedPath("services", lang)}>{t("nav.services")}</a>
+            <a class="site-footer__nav-link" href={getLocalizedPath("blog", lang)}>{t("nav.blog")}</a>
+            <a class="site-footer__nav-link" href={getLocalizedPath("contact", lang)}>{t("nav.contact")}</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
     <script is:inline>
       window.__IZYBIZ_LANG = "{lang}";
       window.__IZYBIZ_DEFAULT_LANG = "{defaultLang}";

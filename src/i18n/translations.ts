@@ -21,6 +21,7 @@ export const ui = {
     "blog.readmore": "Lire l'article",
     "blog.title": "Blog",
     "blog.subtitle": "Insights dirigeants sur la transformation et l'IA",
+    "footer.copyright": "© 2026 Izybiz — Tous droits réservés",
   },
   en: {
     "nav.deliver": "What we deliver",
@@ -35,6 +36,7 @@ export const ui = {
     "blog.readmore": "Read article",
     "blog.title": "Blog",
     "blog.subtitle": "Executive insights on transformation and AI",
+    "footer.copyright": "© 2026 Izybiz — All rights reserved",
   },
   es: {
     "nav.deliver": "Qué entregamos",
@@ -49,6 +51,7 @@ export const ui = {
     "blog.readmore": "Leer artículo",
     "blog.title": "Blog",
     "blog.subtitle": "Perspectivas directivas sobre transformación e IA",
+    "footer.copyright": "© 2026 Izybiz — Todos los derechos reservados",
   },
 } as const;
 
