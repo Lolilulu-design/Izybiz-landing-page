@@ -1,0 +1,83 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getLocalizedPath } from "../i18n/translations";
+
+const lang = "fr";
+
+const services = [
+  {
+    title: "Management de transition",
+    description: "Un dirigeant opérationnel disponible en quelques semaines. Pas un rapport — une prise de fonction réelle, avec vos équipes, sur vos enjeux. Résultats mesurables dès J30.",
+    href: getLocalizedPath("transition", lang),
+    tags: ["DG / DGA / COO par intérim", "Transformation qui dérive", "Direction vacante", "Série B & scale-up"],
+  },
+  {
+    title: "Intégration IA en entreprise",
+    description: "De POC à production. Framing des use cases, sélection des vendors, design des workflows, déploiement. L'organisation sort autonome — pas dépendante d'un consultant.",
+    href: getLocalizedPath("ai", lang),
+    tags: ["Framing use cases", "Gouvernance IA", "Workflows opérationnels", "Indépendance à la sortie"],
+  },
+  {
+    title: "Pilotage de la performance",
+    description: "Mise en place des KPIs structurants, des boucles de feedback et des rituels de management qui permettent à une organisation de piloter par les résultats — pas par l'intuition.",
+    href: getLocalizedPath("performance", lang),
+    tags: ["KPIs structurants", "Tableaux de bord opérationnels", "Rituels de management", "Culture data"],
+  },
+  {
+    title: "Redressement & Restructuration",
+    description: "Quand une BU dérive — churn accéléré, marges qui s'effondrent, cash qui se tend. Diagnostic rapide, plan d'action priorisé, exécution sous pression. Pas de warming-up.",
+    href: getLocalizedPath("turnaround", lang),
+    tags: ["BU en difficulté", "Redressement opérationnel", "Cash & marges", "Plan d'action J15"],
+  },
+  {
+    title: "Scale-up & Industrialisation",
+    description: "Les process qui tiennent à 10 personnes ne tiennent pas à 80. Structuration du delivery, des équipes et des opérations avant que la croissance ne devienne un problème.",
+    href: getLocalizedPath("scaleup", lang),
+    tags: ["Structuration pré-Série B", "Delivery & opérations", "Process scalables", "Organisation cible"],
+  },
+];
+---
+
+<Layout
+  lang={lang}
+  title="Services — Izybiz"
+  description="Management de transition, intégration IA, pilotage de la performance, redressement, scale-up. Interventions opérationnelles pour ETI et scale-ups."
+  navType="page"
+  includeGlobalScript={true}
+>
+  <main>
+    <div class="services-page">
+      <header class="services-page__header">
+        <h1 class="services-page__title">Ce qu'Izybiz fait</h1>
+        <p class="services-page__intro">Cinq types d'intervention. Toutes opérationnelles. Toutes avec un objectif unique : que votre organisation sorte autonome à la fin de la mission.</p>
+      </header>
+
+      <ul class="services-list">
+        {services.map((service) => (
+          <li class="services-card">
+            <div class="services-card__content">
+              <h2 class="services-card__title">{service.title}</h2>
+              <p class="services-card__description">{service.description}</p>
+              <ul class="services-card__tags">
+                {service.tags.map((tag) => (
+                  <li class="services-card__tag">{tag}</li>
+                ))}
+              </ul>
+            </div>
+            <a class="services-card__link" href={service.href}>
+              En savoir plus
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="services-page__cta">
+        <p>Votre situation ne rentre pas exactement dans une case ?</p>
+        <a href={getLocalizedPath("contact", lang)} class="services-page__cta-link">Parlons-en — 30 minutes, sans engagement →</a>
+      </div>
+    </div>
+  </main>
+</Layout>

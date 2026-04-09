@@ -1,26 +1,18 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { getEntry, render } from "astro:content";
 
 const lang = "en";
+const page = await getEntry("pages-en", "ai-integration");
+const { Content } = await render(page);
 ---
 
-<Layout
-  lang={lang}
-  title="Izybiz | AI integration"
-  description="AI integration page"
->
-  <main class="page-shell">
-    <section class="section-one" aria-label="Page content">
-      <div class="hero-izybiz">
-        <div class="hero-izybiz__text">
-          <h1 class="hero-izybiz__title">
-            <span class="hero-izybiz__title-line hero-izybiz__title-line--visible">AI integration</span>
-          </h1>
-          <p class="hero-izybiz__subtitle hero-izybiz__subtitle--visible">
-            <span>Content coming soon.</span>
-          </p>
-        </div>
-      </div>
-    </section>
+<Layout lang={lang} title={page.data.title} description={page.data.description} includeGlobalScript={true}>
+  <main>
+    <article class="article-page">
+      <h1 class="article-page__title">{page.data.title}</h1>
+      <p class="article-page__description">{page.data.description}</p>
+      <div class="article-page__body"><Content /></div>
+    </article>
   </main>
 </Layout>

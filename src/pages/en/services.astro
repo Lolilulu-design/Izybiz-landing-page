@@ -1,0 +1,83 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getLocalizedPath } from "../../i18n/translations";
+
+const lang = "en";
+
+const services = [
+  {
+    title: "Interim Management",
+    description: "An operational executive available within weeks. Not a report — a real role, with your teams, on your actual challenges. Measurable results from day 30.",
+    href: getLocalizedPath("transition", lang),
+    tags: ["Interim CEO / COO / CDO", "Derailing transformation", "Vacant leadership", "Pre-Series B scale-up"],
+  },
+  {
+    title: "AI Integration",
+    description: "From POC to production. Use case framing, vendor selection, workflow design, deployment. Your organisation exits fully autonomous — no consultant dependency.",
+    href: getLocalizedPath("ai", lang),
+    tags: ["Use case framing", "AI governance", "Operational workflows", "Independent exit"],
+  },
+  {
+    title: "Performance Management",
+    description: "Structuring KPIs, feedback loops and management rituals that let an organisation run on results — not intuition.",
+    href: getLocalizedPath("performance", lang),
+    tags: ["Structural KPIs", "Operational dashboards", "Management rituals", "Data culture"],
+  },
+  {
+    title: "Operational Turnaround",
+    description: "When a business unit is drifting — accelerating churn, collapsing margins, tightening cash. Fast diagnosis, prioritised action plan, execution under pressure.",
+    href: getLocalizedPath("turnaround", lang),
+    tags: ["Distressed BU", "Operational turnaround", "Cash & margins", "Action plan Day 15"],
+  },
+  {
+    title: "Scale-up & Industrialisation",
+    description: "The processes that work at 10 people break at 80. Structuring delivery, teams and operations before growth becomes the problem.",
+    href: getLocalizedPath("scaleup", lang),
+    tags: ["Pre-Series B structuring", "Delivery & operations", "Scalable processes", "Target org design"],
+  },
+];
+---
+
+<Layout
+  lang={lang}
+  title="Services — Izybiz"
+  description="Interim management, AI integration, performance management, operational turnaround, scale-up. Operational interventions for mid-market companies and scale-ups."
+  navType="page"
+  includeGlobalScript={true}
+>
+  <main>
+    <div class="services-page">
+      <header class="services-page__header">
+        <h1 class="services-page__title">What Izybiz does</h1>
+        <p class="services-page__intro">Five types of intervention. All operational. All with one objective: your organisation exits the engagement fully autonomous.</p>
+      </header>
+
+      <ul class="services-list">
+        {services.map((service) => (
+          <li class="services-card">
+            <div class="services-card__content">
+              <h2 class="services-card__title">{service.title}</h2>
+              <p class="services-card__description">{service.description}</p>
+              <ul class="services-card__tags">
+                {service.tags.map((tag) => (
+                  <li class="services-card__tag">{tag}</li>
+                ))}
+              </ul>
+            </div>
+            <a class="services-card__link" href={service.href}>
+              Learn more
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="services-page__cta">
+        <p>Your situation doesn't fit neatly into one category?</p>
+        <a href={getLocalizedPath("contact", lang)} class="services-page__cta-link">Let's talk — 30 minutes, no commitment →</a>
+      </div>
+    </div>
+  </main>
+</Layout>

@@ -8,26 +8,29 @@ const t = useTranslations(lang);
 const posts = (await getCollection("blog-fr")).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<Layout lang={lang} title="Izybiz | Blog" description="Blog Izybiz">
-  <main class="page-shell">
-    <section class="section-two">
-      <div class="section-two__inner">
-        <header class="section-two__intro">
-          <h1 class="section-two__title">{t("blog.title")}</h1>
-          <p class="section-two__subtitle">{t("blog.subtitle")}</p>
-        </header>
-        <div class="section-two__grid">
-          {posts.map((post) => (
-            <article class="section-two__case section-two__case--yellow">
-              <div class="section-two__case-copy">
-                <h2 class="section-two__case-title">{post.data.title}</h2>
-                <p class="section-two__case-description">{post.data.description}</p>
-                <a class="hero-izybiz__button" href={`/blog/${post.slug}`}>{t("blog.readmore")}</a>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
+<Layout lang={lang} title="Blog — Izybiz" description={t("blog.subtitle")} includeGlobalScript={true}>
+  <main>
+    <div class="blog-index">
+      <header class="blog-index__header">
+        <h1 class="blog-index__title">Terrain. Pas théorie.</h1>
+        <p class="blog-index__subtitle">{t("blog.subtitle")}</p>
+      </header>
+      <ul class="blog-list">
+        {posts.map((post) => {
+          const slug = post.id.replace(/\.md$/, "");
+          const date = post.data.pubDate.toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" });
+          return (
+            <li class="blog-card">
+              <a class="blog-card__link" href={`/blog/${slug}`}>
+                <time class="blog-card__date" datetime={post.data.pubDate.toISOString()}>{date}</time>
+                <h2 class="blog-card__title">{post.data.title}</h2>
+                <p class="blog-card__description">{post.data.description}</p>
+                <span class="blog-card__cta">{t("blog.readmore")} →</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   </main>
 </Layout>

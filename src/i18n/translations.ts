@@ -14,6 +14,7 @@ export const ui = {
     "nav.faq": "Questions",
     "nav.blog": "Blog",
     "nav.about": "À propos",
+    "nav.services": "Services",
     "nav.contact": "Contact",
     "cta.book": "Prendre contact",
     "cta.linkedin": "Message LinkedIn",
@@ -27,6 +28,7 @@ export const ui = {
     "nav.faq": "FAQ",
     "nav.blog": "Blog",
     "nav.about": "About",
+    "nav.services": "Services",
     "nav.contact": "Contact",
     "cta.book": "Book a call",
     "cta.linkedin": "LinkedIn message",
@@ -40,6 +42,7 @@ export const ui = {
     "nav.faq": "Preguntas",
     "nav.blog": "Blog",
     "nav.about": "Sobre mí",
+    "nav.services": "Servicios",
     "nav.contact": "Contacto",
     "cta.book": "Reservar llamada",
     "cta.linkedin": "Mensaje LinkedIn",
@@ -65,6 +68,11 @@ export function useTranslations(lang: Lang) {
 
 const localizedRoutes = {
   home: { fr: "/", en: "/en/", es: "/es/" },
+  services: {
+    fr: "/services",
+    en: "/en/services",
+    es: "/es/servicios",
+  },
   transition: {
     fr: "/management-de-transition",
     en: "/en/management-transition",
@@ -74,6 +82,21 @@ const localizedRoutes = {
     fr: "/integration-ia",
     en: "/en/ai-integration",
     es: "/es/integracion-ia",
+  },
+  performance: {
+    fr: "/pilotage-performance",
+    en: "/en/performance-management",
+    es: "/es/gestion-rendimiento",
+  },
+  turnaround: {
+    fr: "/redressement-restructuration",
+    en: "/en/operational-turnaround",
+    es: "/es/reestructuracion-operacional",
+  },
+  scaleup: {
+    fr: "/scale-up-industrialisation",
+    en: "/en/scale-up-operations",
+    es: "/es/industrializacion-scale-up",
   },
   about: {
     fr: "/a-propos",

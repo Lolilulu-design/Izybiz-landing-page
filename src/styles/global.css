@@ -2854,3 +2854,406 @@ h2:not(.we-deliver__title):not(.hero-metrics__title) {
     transition-duration: 0.01ms;
   }
 }
+
+/* ─── Nav icon buttons ────────────────────────────────────────────────────── */
+
+.site-nav__icon {
+  flex-shrink: 0;
+}
+
+.site-nav__button--book {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.site-nav__button--linkedin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px !important;
+  min-width: 0 !important;
+}
+
+/* ─── Services page ───────────────────────────────────────────────────────── */
+
+.services-page {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 80px) clamp(20px, 4vw, 40px) clamp(60px, 8vw, 120px);
+}
+
+.services-page__header {
+  margin-bottom: clamp(40px, 5vw, 64px);
+}
+
+.services-page__title {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #0f172a;
+  margin: 0 0 16px;
+}
+
+.services-page__intro {
+  font-family: "Didact Gothic", sans-serif;
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.6;
+  color: rgba(15, 23, 42, 0.6);
+  margin: 0;
+  max-width: 600px;
+}
+
+.services-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.services-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: clamp(24px, 3vw, 36px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  transition: background 160ms ease;
+}
+
+.services-card:hover {
+  background: #f0e8dc;
+}
+
+.services-card__content {
+  flex: 1;
+}
+
+.services-card__title {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 10px;
+}
+
+.services-card__description {
+  font-family: "Didact Gothic", sans-serif;
+  font-size: clamp(14px, 1.4vw, 15px);
+  line-height: 1.65;
+  color: rgba(15, 23, 42, 0.65);
+  margin: 0 0 16px;
+}
+
+.services-card__tags {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.services-card__tag {
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 12px;
+  color: rgba(15, 23, 42, 0.5);
+  background: rgba(15, 23, 42, 0.05);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.services-card__link {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ff6a3d;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: gap 160ms ease;
+}
+
+.services-card__link:hover {
+  gap: 10px;
+}
+
+.services-page__cta {
+  margin-top: clamp(48px, 6vw, 72px);
+  padding-top: 32px;
+  border-top: 1px solid rgba(15, 23, 42, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.services-page__cta p {
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 15px;
+  color: rgba(15, 23, 42, 0.6);
+  margin: 0;
+}
+
+.services-page__cta-link {
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ff6a3d;
+  text-decoration: none;
+}
+
+.services-page__cta-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .services-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ─── Blog index ─────────────────────────────────────────────────────────── */
+
+.blog-index {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 80px) clamp(20px, 4vw, 40px) clamp(60px, 8vw, 120px);
+}
+
+.blog-index__header {
+  margin-bottom: clamp(40px, 5vw, 56px);
+}
+
+.blog-index__title {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #0f172a;
+  margin: 0 0 12px;
+}
+
+.blog-index__subtitle {
+  font-family: "Didact Gothic", sans-serif;
+  font-size: clamp(15px, 1.6vw, 17px);
+  color: rgba(15, 23, 42, 0.55);
+  margin: 0;
+}
+
+.blog-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-card {
+  border-top: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+.blog-card:last-child {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+.blog-card__link {
+  display: block;
+  padding: clamp(20px, 3vw, 32px) 0;
+  text-decoration: none;
+  transition: padding-left 160ms ease;
+}
+
+.blog-card__link:hover {
+  padding-left: 8px;
+}
+
+.blog-card__date {
+  display: block;
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(15, 23, 42, 0.4);
+  margin-bottom: 8px;
+}
+
+.blog-card__title {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(17px, 2vw, 21px);
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px;
+  line-height: 1.25;
+}
+
+.blog-card__description {
+  font-family: "Didact Gothic", sans-serif;
+  font-size: clamp(14px, 1.4vw, 15px);
+  line-height: 1.6;
+  color: rgba(15, 23, 42, 0.6);
+  margin: 0 0 12px;
+}
+
+.blog-card__cta {
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ff6a3d;
+}
+
+/* ─── Blog article layout ─────────────────────────────────────────────────── */
+
+.article-page {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 80px) clamp(20px, 4vw, 40px) clamp(60px, 8vw, 120px);
+}
+
+.article-page__title {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #0f172a;
+  margin: 0 0 16px;
+  text-align: left;
+}
+
+.article-page__date {
+  display: block;
+  font-family: "Didact Gothic", sans-serif;
+  font-size: 13px;
+  color: rgba(15, 23, 42, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: -36px 0 48px;
+}
+
+.article-page__description {
+  font-family: "Didact Gothic", sans-serif;
+  font-size: clamp(16px, 1.8vw, 19px);
+  line-height: 1.6;
+  color: rgba(15, 23, 42, 0.6);
+  margin: 0 0 48px;
+  text-align: left;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+  padding-bottom: 32px;
+}
+
+/* Article body typography */
+.article-page__body {
+  font-family: "Didact Gothic", sans-serif;
+  font-size: clamp(15px, 1.6vw, 17px);
+  line-height: 1.75;
+  color: #0f172a;
+  text-align: left;
+}
+
+.article-page__body h2 {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(20px, 2.4vw, 28px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #0f172a;
+  margin: 2.5em 0 0.75em;
+}
+
+.article-page__body h3 {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(17px, 1.9vw, 21px);
+  font-weight: 600;
+  line-height: 1.25;
+  color: #0f172a;
+  margin: 2em 0 0.6em;
+}
+
+.article-page__body p {
+  margin: 0 0 1.4em;
+}
+
+.article-page__body strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.article-page__body a {
+  color: #ff6a3d;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article-page__body a:hover {
+  color: #e0522a;
+}
+
+.article-page__body ul,
+.article-page__body ol {
+  padding-left: 1.5em;
+  margin: 0 0 1.4em;
+}
+
+.article-page__body li {
+  margin-bottom: 0.5em;
+}
+
+.article-page__body blockquote {
+  border-left: 3px solid #ff6a3d;
+  margin: 1.5em 0;
+  padding: 0.5em 0 0.5em 1.25em;
+  color: rgba(15, 23, 42, 0.7);
+  font-style: italic;
+}
+
+.article-page__body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: 0.9em;
+}
+
+.article-page__body th {
+  background: rgba(15, 23, 42, 0.05);
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 2px solid rgba(15, 23, 42, 0.15);
+}
+
+.article-page__body td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  vertical-align: top;
+}
+
+.article-page__body hr {
+  border: none;
+  border-top: 1px solid rgba(15, 23, 42, 0.1);
+  margin: 2.5em 0;
+}
+
+.article-page__body code {
+  font-family: monospace;
+  font-size: 0.875em;
+  background: rgba(15, 23, 42, 0.06);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+@media (max-width: 640px) {
+  .article-page__body table {
+    display: block;
+    overflow-x: auto;
+  }
+}

@@ -4,26 +4,45 @@ import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog-fr");
-  return posts.map((post) => ({ params: { slug: post.id.replace(/\.md$/, "") }, props: { post } }));
+  const enPosts = await getCollection("blog-en");
+  const esPosts = await getCollection("blog-es");
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.md$/, "") },
+    props: { post, enPosts, esPosts },
+  }));
 }
 
-const { post } = Astro.props;
+const { post, enPosts, esPosts } = Astro.props;
 const { Content } = await render(post);
 const lang = "fr";
+const pubDate = post.data.pubDate.toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" });
+
+// Find translated slugs via translationKey
+const tk = post.data.translationKey;
+const enPost = enPosts.find((p) => p.data.translationKey === tk);
+const esPost = esPosts.find((p) => p.data.translationKey === tk);
+const enPath = enPost ? `/en/blog/${enPost.id.replace(/\.md$/, "")}` : "/en/blog";
+const esPath = esPost ? `/es/blog/${esPost.id.replace(/\.md$/, "")}` : "/es/blog";
+const currentPath = `/blog/${post.id.replace(/\.md$/, "")}`;
 ---
 
-<Layout lang={lang} title={`Izybiz | ${post.data.title}`} description={post.data.description}>
-  <main class="page-shell">
-    <section class="section-two">
-      <div class="section-two__inner">
-        <article class="section-two__case section-two__case--blue">
-          <div class="section-two__case-copy">
-            <h1 class="section-two__case-title">{post.data.title}</h1>
-            <p class="section-two__case-description">{post.data.description}</p>
-            <Content />
-          </div>
-        </article>
+<Layout
+  lang={lang}
+  title={post.data.title}
+  description={post.data.description}
+  ogType="article"
+  includeGlobalScript={true}
+  canonicalPath={currentPath}
+  alternates={{ fr: currentPath, en: enPath, es: esPath }}
+>
+  <main>
+    <article class="article-page">
+      <h1 class="article-page__title">{post.data.title}</h1>
+      <p class="article-page__description">{post.data.description}</p>
+      <time class="article-page__date" datetime={post.data.pubDate.toISOString()}>{pubDate}</time>
+      <div class="article-page__body">
+        <Content />
       </div>
-    </section>
+    </article>
   </main>
 </Layout>

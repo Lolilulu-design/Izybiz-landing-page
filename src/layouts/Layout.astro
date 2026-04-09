@@ -14,6 +14,9 @@ interface Props {
   lang: Lang;
   canonicalPath?: string;
   includeGlobalScript?: boolean;
+  ogType?: string;
+  navType?: "home" | "page";
+  alternates?: { fr?: string; en?: string; es?: string };
 }
 
 const {
@@ -22,15 +25,22 @@ const {
   lang,
   canonicalPath = Astro.url.pathname,
   includeGlobalScript = false,
+  ogType = "website",
+  navType: navTypeProp,
+  alternates,
 } = Astro.props;
 
 const t = useTranslations(lang);
 const cleanPath = canonicalPath.endsWith("/") ? canonicalPath.slice(0, -1) || "/" : canonicalPath;
+
+// Auto-detect nav type
+const homePathnames = new Set(["/", "/en", "/en/", "/es", "/es/"]);
+const navType = navTypeProp ?? (homePathnames.has(Astro.url.pathname) ? "home" : "page");
 const canonicalUrl = `https://izybiz.fr${cleanPath}`;
 const localizedAlt = {
-  fr: mapPathToLang(cleanPath, "fr"),
-  en: mapPathToLang(cleanPath, "en"),
-  es: mapPathToLang(cleanPath, "es"),
+  fr: alternates?.fr ?? mapPathToLang(cleanPath, "fr"),
+  en: alternates?.en ?? mapPathToLang(cleanPath, "en"),
+  es: alternates?.es ?? mapPathToLang(cleanPath, "es"),
 };
 ---
 
@@ -66,8 +76,22 @@ const localizedAlt = {
     <link rel="alternate" hreflang="en" href={`https://izybiz.fr${localizedAlt.en}`} />
     <link rel="alternate" hreflang="es" href={`https://izybiz.fr${localizedAlt.es}`} />
     <link rel="alternate" hreflang="x-default" href={`https://izybiz.fr${localizedAlt.en}`} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={lang === "fr" ? "fr_FR" : lang === "es" ? "es_ES" : "en_US"} />
+    <meta property="og:site_name" content="Izybiz" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
   </head>
   <body class="intro-stage-1" id="top">
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T6W62FCN" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <header class="site-header" aria-label="Site header">
       <div class="site-header__pill">
         <div class="site-header__identity">
@@ -75,36 +99,52 @@ const localizedAlt = {
             <img src="/assets/Logo Izybiz.png" alt="IZYBIZ" />
           </a>
           <div class="site-nav__lang" aria-label="Language switcher">
-            <a href={mapPathToLang(Astro.url.pathname, "fr")} aria-current={lang === "fr" ? "true" : undefined}>FR</a>
+            <a href={localizedAlt.fr} aria-current={lang === "fr" ? "true" : undefined}>FR</a>
             <span class="site-nav__lang-separator" aria-hidden="true">/</span>
-            <a href={mapPathToLang(Astro.url.pathname, "en")} aria-current={lang === "en" ? "true" : undefined}>EN</a>
+            <a href={localizedAlt.en} aria-current={lang === "en" ? "true" : undefined}>EN</a>
             <span class="site-nav__lang-separator" aria-hidden="true">/</span>
-            <a href={mapPathToLang(Astro.url.pathname, "es")} aria-current={lang === "es" ? "true" : undefined}>ES</a>
+            <a href={localizedAlt.es} aria-current={lang === "es" ? "true" : undefined}>ES</a>
           </div>
         </div>
 
         <nav class="site-nav" aria-label="Primary">
           <span class="site-nav__links-group">
-            <a class="site-nav__link" href="#we-deliver">{t("nav.deliver")}</a>
+            <a class="site-nav__link" href={getLocalizedPath("about", lang)}>{t("nav.about")}</a>
             <span class="site-nav__divider" aria-hidden="true"></span>
-            <a class="site-nav__link" href="#we-do">{t("nav.cases")}</a>
+            <a class="site-nav__link" href={getLocalizedPath("services", lang)}>{t("nav.services")}</a>
             <span class="site-nav__divider" aria-hidden="true"></span>
-            <a class="site-nav__link" href="#faq">{t("nav.faq")}</a>
+            <a class="site-nav__link" href={getLocalizedPath("blog", lang)}>{t("nav.blog")}</a>
           </span>
         </nav>
 
         <div class="site-nav__actions" aria-label="Primary actions">
-          <button class="site-nav__button site-nav__button--book" type="button" data-demo-modal-open>
-            {t("cta.book")}
+          <button class="site-nav__button site-nav__button--book" type="button" data-demo-modal-open aria-label={t("cta.book")}>
+            <!-- Calendar icon -->
+            <svg class="site-nav__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <rect x="2" y="3.5" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M2 7.5h14" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="6" cy="11" r="1" fill="currentColor"/>
+              <circle cx="9" cy="11" r="1" fill="currentColor"/>
+              <circle cx="12" cy="11" r="1" fill="currentColor"/>
+            </svg>
+            <span class="site-nav__button-label">{t("cta.book")}</span>
           </button>
           <a
             class="site-nav__button site-nav__button--linkedin"
             href="https://www.linkedin.com/company/izybiz/"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Open the IZYBIZ LinkedIn page in a new tab"
+            aria-label="LinkedIn Izybiz"
           >
-            {t("cta.linkedin")}
+            <!-- LinkedIn icon -->
+            <svg class="site-nav__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <rect x="1.5" y="1.5" width="15" height="15" rx="3" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M5 7.5V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="5" cy="5.5" r="1" fill="currentColor"/>
+              <path d="M8.5 13V10c0-1.38 1-2.5 2-2.5s2 .84 2 2.5V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M8.5 7.5V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
           </a>
         </div>
 
@@ -121,9 +161,9 @@ const localizedAlt = {
       </div>
 
       <div class="site-nav__menu" id="site-nav-menu" hidden data-nav-menu>
-        <a class="site-nav__menu-link" href="#we-deliver">{t("nav.deliver")}</a>
-        <a class="site-nav__menu-link" href="#we-do">{t("nav.cases")}</a>
-        <a class="site-nav__menu-link" href="#faq">{t("nav.faq")}</a>
+        <a class="site-nav__menu-link" href={getLocalizedPath("about", lang)}>{t("nav.about")}</a>
+        <a class="site-nav__menu-link" href={getLocalizedPath("services", lang)}>{t("nav.services")}</a>
+        <a class="site-nav__menu-link" href={getLocalizedPath("blog", lang)}>{t("nav.blog")}</a>
         <button class="site-nav__menu-link" type="button" data-demo-modal-open>{t("cta.book")}</button>
         <a
           class="site-nav__menu-link"

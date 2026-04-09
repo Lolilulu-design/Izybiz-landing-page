@@ -1,0 +1,83 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getLocalizedPath } from "../../i18n/translations";
+
+const lang = "es";
+
+const services = [
+  {
+    title: "Management de Transición",
+    description: "Un ejecutivo operacional disponible en semanas. No un informe — un rol real, con sus equipos, sobre sus desafíos concretos. Resultados medibles desde el día 30.",
+    href: getLocalizedPath("transition", lang),
+    tags: ["DG / COO / CDO interino", "Transformación que deriva", "Dirección vacante", "Scale-up pre-Serie B"],
+  },
+  {
+    title: "Integración IA en la empresa",
+    description: "Del POC a producción real. Definición de casos de uso, selección de vendors, diseño de workflows, despliegue. La organización sale autónoma — sin dependencia de consultores.",
+    href: getLocalizedPath("ai", lang),
+    tags: ["Definición casos de uso", "Gobernanza IA", "Workflows operacionales", "Salida independiente"],
+  },
+  {
+    title: "Gestión del Rendimiento",
+    description: "Implantación de KPIs estructurantes, bucles de retroalimentación y rituales de gestión que permiten a una organización pilotar por resultados — no por intuición.",
+    href: getLocalizedPath("performance", lang),
+    tags: ["KPIs estructurantes", "Cuadros de mando", "Rituales de gestión", "Cultura data"],
+  },
+  {
+    title: "Reestructuración Operacional",
+    description: "Cuando una BU deriva — churn acelerado, márgenes en caída, caja bajo presión. Diagnóstico rápido, plan de acción priorizado, ejecución sin calentamiento previo.",
+    href: getLocalizedPath("turnaround", lang),
+    tags: ["BU en dificultad", "Reestructuración operacional", "Caja y márgenes", "Plan de acción D15"],
+  },
+  {
+    title: "Scale-up e Industrialización",
+    description: "Los procesos que funcionan a 10 personas se rompen a 80. Estructuración del delivery, los equipos y las operaciones antes de que el crecimiento se convierta en el problema.",
+    href: getLocalizedPath("scaleup", lang),
+    tags: ["Estructuración pre-Serie B", "Delivery y operaciones", "Procesos escalables", "Diseño org objetivo"],
+  },
+];
+---
+
+<Layout
+  lang={lang}
+  title="Servicios — Izybiz"
+  description="Management de transición, integración IA, gestión del rendimiento, reestructuración, scale-up. Intervenciones operacionales para ETI y scale-ups."
+  navType="page"
+  includeGlobalScript={true}
+>
+  <main>
+    <div class="services-page">
+      <header class="services-page__header">
+        <h1 class="services-page__title">Lo que hace Izybiz</h1>
+        <p class="services-page__intro">Cinco tipos de intervención. Todas operacionales. Todas con un objetivo único: que su organización salga autónoma al final de la misión.</p>
+      </header>
+
+      <ul class="services-list">
+        {services.map((service) => (
+          <li class="services-card">
+            <div class="services-card__content">
+              <h2 class="services-card__title">{service.title}</h2>
+              <p class="services-card__description">{service.description}</p>
+              <ul class="services-card__tags">
+                {service.tags.map((tag) => (
+                  <li class="services-card__tag">{tag}</li>
+                ))}
+              </ul>
+            </div>
+            <a class="services-card__link" href={service.href}>
+              Saber más
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="services-page__cta">
+        <p>¿Su situación no encaja exactamente en una categoría?</p>
+        <a href={getLocalizedPath("contact", lang)} class="services-page__cta-link">Hablemos — 30 minutos, sin compromiso →</a>
+      </div>
+    </div>
+  </main>
+</Layout>

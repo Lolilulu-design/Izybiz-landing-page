@@ -4,26 +4,44 @@ import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog-es");
-  return posts.map((post) => ({ params: { slug: post.id.replace(/\.md$/, "") }, props: { post } }));
+  const frPosts = await getCollection("blog-fr");
+  const enPosts = await getCollection("blog-en");
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.md$/, "") },
+    props: { post, frPosts, enPosts },
+  }));
 }
 
-const { post } = Astro.props;
+const { post, frPosts, enPosts } = Astro.props;
 const { Content } = await render(post);
 const lang = "es";
+const pubDate = post.data.pubDate.toLocaleDateString("es-ES", { year: "numeric", month: "long", day: "numeric" });
+
+const tk = post.data.translationKey;
+const frPost = frPosts.find((p) => p.data.translationKey === tk);
+const enPost = enPosts.find((p) => p.data.translationKey === tk);
+const frPath = frPost ? `/blog/${frPost.id.replace(/\.md$/, "")}` : "/blog";
+const enPath = enPost ? `/en/blog/${enPost.id.replace(/\.md$/, "")}` : "/en/blog";
+const currentPath = `/es/blog/${post.id.replace(/\.md$/, "")}`;
 ---
 
-<Layout lang={lang} title={`Izybiz | ${post.data.title}`} description={post.data.description}>
-  <main class="page-shell">
-    <section class="section-two">
-      <div class="section-two__inner">
-        <article class="section-two__case section-two__case--blue">
-          <div class="section-two__case-copy">
-            <h1 class="section-two__case-title">{post.data.title}</h1>
-            <p class="section-two__case-description">{post.data.description}</p>
-            <Content />
-          </div>
-        </article>
+<Layout
+  lang={lang}
+  title={post.data.title}
+  description={post.data.description}
+  ogType="article"
+  includeGlobalScript={true}
+  canonicalPath={currentPath}
+  alternates={{ fr: frPath, en: enPath, es: currentPath }}
+>
+  <main>
+    <article class="article-page">
+      <h1 class="article-page__title">{post.data.title}</h1>
+      <p class="article-page__description">{post.data.description}</p>
+      <time class="article-page__date" datetime={post.data.pubDate.toISOString()}>{pubDate}</time>
+      <div class="article-page__body">
+        <Content />
       </div>
-    </section>
+    </article>
   </main>
 </Layout>
